@@ -13,8 +13,8 @@ export const users = createTable(
   "users",
   {
     id: bigint("id", {mode: "number"}).primaryKey().autoincrement(),
-    name: varchar("name", { length: 256 }),
-    status: varchar("status", { length: 256 }),
+    name: varchar("name", { length: 256 }).notNull(),
+    status: varchar("status", { length: 256 }).notNull(),
     updatedAt: timestamp("updated_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -26,7 +26,7 @@ export const history = createTable(
   {
     id: bigint("id", {mode: "number"}).primaryKey().autoincrement(),
     user_id: bigint("user_id", {mode: "number"}).references(() => users.id),
-    status: varchar("status", { length: 256 }),
+    status: varchar("status", { length: 256 }).notNull(),
     updatedAt: timestamp("updated_at").notNull(),
   },
 );
