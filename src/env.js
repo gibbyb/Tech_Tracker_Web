@@ -12,13 +12,13 @@ export const env = createEnv({
       .enum(["development", "test", "production"])
       .default("development"),
     API_KEY: z.string(),
-    AUTH_SECRET: 
+    AUTH_SECRET:
       process.env.NODE_ENV === "production"
         ? z.string()
         : z.string().optional(),
-    AUTH_MICROSOFT_ENTRA_ID: z.string(),
-    AUTH_MICROSOFT_ENTRA_SECRET: z.string(),
-    AUTH_MICROSOFT_ENTRA_TENANT_ID: z.string(),
+    AUTH_MICROSOFT_ENTRA_ID_ID: z.string(),
+    AUTH_MICROSOFT_ENTRA_ID_SECRET: z.string(),
+    AUTH_MICROSOFT_ENTRA_ID_TENANT_ID: z.string(),
   },
 
   /**
@@ -38,10 +38,10 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     API_KEY: process.env.API_KEY,
-    AUTH_SECRET: process.env.AUTH_SECRET,
-    AUTH_MICROSOFT_ENTRA_ID: process.env.AUTH_MICROSOFT_ENTRA_ID,
-    AUTH_MICROSOFT_ENTRA_SECRET: process.env.AUTH_MICROSOFT_ENTRA_SECRET,
-    AUTH_MICROSOFT_ENTRA_TENANT_ID: process.env.AUTH_MICROSOFT_ENTRA_TENANT_ID,
+    AUTH_SECRET: process.env.NEXTAUTH_SECRET,
+    AUTH_MICROSOFT_ENTRA_ID_ID: process.env.AUTH_MICROSOFT_ENTRA_ID_ID,
+    AUTH_MICROSOFT_ENTRA_ID_SECRET: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET,
+    AUTH_MICROSOFT_ENTRA_ID_TENANT_ID: process.env.AUTH_MICROSOFT_ENTRA_ID_TENANT_ID,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

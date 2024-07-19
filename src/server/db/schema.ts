@@ -1,34 +1,32 @@
-// Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
-
 import { sql } from "drizzle-orm";
 import {
   bigint,
-  index,
   mysqlTableCreator,
   timestamp,
   varchar,
 } from "drizzle-orm/mysql-core";
 
-/**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
- *
- * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
- */
-export const createTable = mysqlTableCreator((name) => `tech_tracker_web_${name}`);
+export const createTable = mysqlTableCreator((name) => `${name}`);
 
-export const posts = createTable(
-  "post",
+export const users = createTable(
+  "users",
   {
-    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+    id: bigint("id", {mode: "number"}).primaryKey().autoincrement(),
     name: varchar("name", { length: 256 }),
-    createdAt: timestamp("created_at")
+    status: varchar("status", { length: 256 }),
+    updatedAt: timestamp("updated_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updated_at").onUpdateNow(),
   },
-  (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  })
+);
+
+export const history = createTable(
+  "history",
+  {
+    id: bigint("id", {mode: "number"}).primaryKey().autoincrement(),
+    user_id: bigint("user_id", {mode: "number"}).references(() => users.id),
+    status: varchar("status", { length: 256 }),
+    updatedAt: timestamp("updated_at").notNull(),
+  },
 );
