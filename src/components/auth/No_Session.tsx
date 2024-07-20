@@ -1,10 +1,14 @@
-import Sign_In from "./Sign_In";
+import Sign_In from "~/components/auth/Sign_In";
+import TT_Header from "~/components/ui/TT_Header";
 
 export default function No_Session() {
   return (
-    <div className="w-2/3 mx-auto text-center pt-10">
-      <h1 className="text-2xl font-semibold">Unauthorized. Please sign in first.</h1>
+    <main className="w-full min-h-screen mx-auto text-center pt-10
+      bg-gradient-to-b from-[#111111] to-[#212325]">
+      <div className="pt-8 pb-4">
+        <TT_Header />
+      </div>
       < Sign_In />
-    </div>
+    </main>
   );
 };
