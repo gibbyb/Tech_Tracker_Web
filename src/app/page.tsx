@@ -10,7 +10,7 @@ export default async function HomePage() {
   } else {
     return (
       <main className="min-h-screen bg-gradient-to-b
-        from-[#111111] to-[#111325]">
+        from-[#111111] to-[#212325]">
         <TT_Header />
         <Techs />
       </main>

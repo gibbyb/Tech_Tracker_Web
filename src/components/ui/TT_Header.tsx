@@ -5,9 +5,9 @@ export default function TT_Header() {
     <header className="w-full py-5">
       <div className="flex flex-row items-center text-center justify-center p-8">
         <Image src="/images/tech_tracker_logo.png"
-          alt="Tech Tracker Logo" width={80} height={80}
+          alt="Tech Tracker Logo" width={100} height={100}
         />
-        <h1 className="title-text text-6xl font-semibold pl-4">
+        <h1 className="title-text text-8xl font-semibold pl-12">
           Tech Tracker
         </h1>
       </div>

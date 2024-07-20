@@ -12,6 +12,7 @@ interface Employee {
 
 export default function Table({ employees }: { employees: Employee[] }) {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [selectAll, setSelectAll] = useState(false);
   const [status, setStatus] = useState('');
   const [employeeData, setEmployeeData] = useState(employees);
 
@@ -61,6 +62,24 @@ export default function Table({ employees }: { employees: Employee[] }) {
     );
   };
 
+  const handleSelectAllChange = () => {
+    setSelectAll(!selectAll);
+    if (!selectAll) {
+      const allIds = employees.map((employee) => employee.id);
+      setSelectedIds(allIds);
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedIds.length === employeeData.length && employeeData.length > 0) {
+      setSelectAll(true);
+    } else {
+      setSelectAll(false);
+    }
+  }, [selectedIds, employeeData]);
+
   const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStatus(e.target.value);
   };
@@ -102,10 +121,17 @@ export default function Table({ employees }: { employees: Employee[] }) {
 
   return (
     <div>
-      <table className="techtable w-2/3 min-h-[600px] m-auto text-center border-collapse text-[42px]">
-        <thead className="bg-gradient-to-br from-[#212121] to-[#333333]">
+      <table className="techtable w-5/6 m-auto text-center border-collapse text-[42px]">
+        <thead className="bg-gradient-to-br from-[#232323] to-[#444444]">
           <tr>
-            <th className="tabletitles p-5 border border-[#3e4446] text-[48px]" />
+            <th className="tabletitles p-4 border border-[#3e4446] text-[48px]">
+              <input
+                type="checkbox"
+                className="m-0 cursor-pointer transform scale-150"
+                checked={selectAll}
+                onChange={handleSelectAllChange}
+              />
+            </th>
             <th className="tabletitles p-2 border border-[#3e4446] text-[48px]">Name</th>
             <th className="tabletitles p-2 border border-[#3e4446] text-[48px]">Status</th>
             <th className="tabletitles p-2 border border-[#3e4446] text-[48px]">Updated At</th>
@@ -113,7 +139,8 @@ export default function Table({ employees }: { employees: Employee[] }) {
         </thead>
         <tbody>
           {employeeData.map((employee) => (
-            <tr className="even:bg-gradient-to-bl from-[#222222] to-[#232323]" key={employee.id}>
+            <tr className="even:bg-gradient-to-br from-[#252525] to-[#333333]
+              odd:bg-gradient-to-bl odd:from-[#212127] odd:to-[#232325]" key={employee.id}>
               <td className="p-1 border border-[#3e4446]">
                 <input
                   type="checkbox"
@@ -122,9 +149,9 @@ export default function Table({ employees }: { employees: Employee[] }) {
                   onChange={() => handleCheckboxChange(employee.id)}
                 />
               </td>
-              <td className="p-1 border border-[#3e4446]">{employee.name}</td>
-              <td className="s-column p-1 border border-[#3e4446]">{employee.status}</td>
-              <td className="ua-column p-1 border border-[#3e4446]">{formatTime(employee.updatedAt)}</td>
+              <td className="n-column px-1 py-5 border border-[#3e4446]">{employee.name}</td>
+              <td className="s-column px-1 py-5 border border-[#3e4446]">{employee.status}</td>
+              <td className="ua-column px-1 py-5 border border-[#3e4446]">{formatTime(employee.updatedAt)}</td>
             </tr>
           ))}
         </tbody>
@@ -133,7 +160,7 @@ export default function Table({ employees }: { employees: Employee[] }) {
         <input
           type="text"
           placeholder="New Status"
-          className="min-w-[100px] p-3 border-none rounded-xl text-[#111111] md:text-xl"
+          className="min-w-[100px] p-2.5 border-none rounded-xl text-[#111111] md:text-xl"
           value={status}
           onChange={handleStatusChange}
           onKeyDown={handleKeyPress}
