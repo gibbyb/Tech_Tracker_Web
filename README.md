@@ -1,3 +1,4 @@
+![Tech Tracker Logo](https://git.gibbyb.com/gib/Tech_Tracker_Web/raw/branch/master/public/images/tech_tracker_logo.png)
 # Tech Tracker Website
 
 ### [Find Here](https://techtracker.gibbyb.com/)
