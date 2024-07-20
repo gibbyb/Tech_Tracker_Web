@@ -121,8 +121,8 @@ export default function Table({ employees }: { employees: Employee[] }) {
 
   return (
     <div>
-      <table className="techtable w-5/6 m-auto text-center border-collapse text-[42px]">
-        <thead className="bg-gradient-to-b from-[#323232] to-[#444444]">
+      <table className="techtable rounded-2xl w-5/6 m-auto text-center text-[42px]">
+        <thead className="bg-gradient-to-b from-[#282828] to-[#383838]">
           <tr>
             <th className="tabletitles p-4 border border-[#3e4446] text-[48px]">
               <input
@@ -139,8 +139,8 @@ export default function Table({ employees }: { employees: Employee[] }) {
         </thead>
         <tbody>
           {employeeData.map((employee) => (
-            <tr className="even:bg-gradient-to-br from-[#282828] to-[#333333]
-              odd:bg-gradient-to-tr odd:from-[#212127] odd:to-[#222225]" key={employee.id}>
+            <tr className="even:bg-gradient-to-br from-[#272727] to-[#313131]
+              odd:bg-gradient-to-bl odd:from-[#252525] odd:to-[#212125]" key={employee.id}>
               <td className="p-1 border border-[#3e4446]">
                 <input
                   type="checkbox"
@@ -160,15 +160,15 @@ export default function Table({ employees }: { employees: Employee[] }) {
         <input
           type="text"
           placeholder="New Status"
-          className="min-w-[120px] lg:min-w-[400px] bg-[#F9F6EE] py-2.5 px-3 border-none rounded-xl text-[#111111] md:text-xl"
+          className="min-w-[120px] lg:min-w-[400px] bg-[#F9F6EE] py-2 px-3 border-none rounded-xl text-[#111111] lg:text-2xl"
           value={status}
           onChange={handleStatusChange}
           onKeyDown={handleKeyPress}
         />
         <button
           type="submit"
-          className="min-w-[100px] lg:min-w-[160px] m-2 p-3 border-none rounded-xl text-center
-            font-semibold md:text-xl hover:text-slate-300
+          className="min-w-[100px] lg:min-w-[160px] m-2 p-2 border-none rounded-xl text-center
+            font-semibold lg:text-2xl hover:text-slate-300
             hover:bg-gradient-to-bl hover:from-[#484848] hover:to-[#333333]
             bg-gradient-to-br from-[#595959] to-[#444444]"
           onClick={handleSubmit}
