@@ -122,7 +122,7 @@ export default function Table({ employees }: { employees: Employee[] }) {
   return (
     <div>
       <table className="techtable w-5/6 m-auto text-center border-collapse text-[42px]">
-        <thead className="bg-gradient-to-br from-[#232323] to-[#444444]">
+        <thead className="bg-gradient-to-b from-[#323232] to-[#444444]">
           <tr>
             <th className="tabletitles p-4 border border-[#3e4446] text-[48px]">
               <input
@@ -139,8 +139,8 @@ export default function Table({ employees }: { employees: Employee[] }) {
         </thead>
         <tbody>
           {employeeData.map((employee) => (
-            <tr className="even:bg-gradient-to-br from-[#252525] to-[#333333]
-              odd:bg-gradient-to-bl odd:from-[#212127] odd:to-[#232325]" key={employee.id}>
+            <tr className="even:bg-gradient-to-br from-[#282828] to-[#333333]
+              odd:bg-gradient-to-tr odd:from-[#212127] odd:to-[#222225]" key={employee.id}>
               <td className="p-1 border border-[#3e4446]">
                 <input
                   type="checkbox"
@@ -160,14 +160,14 @@ export default function Table({ employees }: { employees: Employee[] }) {
         <input
           type="text"
           placeholder="New Status"
-          className="min-w-[100px] p-2.5 border-none rounded-xl text-[#111111] md:text-xl"
+          className="min-w-[120px] lg:min-w-[400px] bg-[#F9F6EE] py-2.5 px-3 border-none rounded-xl text-[#111111] md:text-xl"
           value={status}
           onChange={handleStatusChange}
           onKeyDown={handleKeyPress}
         />
         <button
           type="submit"
-          className="m-2 p-3 border-none rounded-2xl text-center
+          className="min-w-[100px] lg:min-w-[160px] m-2 p-3 border-none rounded-xl text-center
             font-semibold md:text-xl hover:text-slate-300
             hover:bg-gradient-to-bl hover:from-[#484848] hover:to-[#333333]
             bg-gradient-to-br from-[#595959] to-[#444444]"
