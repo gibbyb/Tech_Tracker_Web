@@ -10,20 +10,21 @@ export const getEmployees = async () => {
 };
 
 // Function to Update Employee Status using Raw SQL
-export const updateEmployeeStatus = async (employeeIds: number[], newStatus: string) => {
+export const updateEmployeeStatus = async (employeeIds: string[], newStatus: string) => {
   try {
     // Convert array of ids to a format suitable for SQL query (comma-separated string)
-    const idString = employeeIds.join(",");
+    const idList = employeeIds.map(id => parseInt(id, 10));
+    const updatedAt = new Date();
 
-    // Prepare the raw SQL query with embedded variables
-    const query = `
+    // Prepare the query using drizzle-orm's template-like syntax for escaping variables
+    const query = sql`
       UPDATE users
-      SET status = '${newStatus}', updatedAt = '${new Date().toISOString()}'
-      WHERE id IN (${idString})
+      SET status = ${newStatus}, updatedAt = ${updatedAt}
+      WHERE id IN ${idList}
     `;
 
-    // Execute the raw SQL query using the execute method
-    await db.execute(sql`${query}`);
+    // Execute the query
+    await db.execute(query);
 
     return { success: true };
   } catch (error) {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 // Define the Employee interface to match data fetched on the server
 interface Employee {
@@ -19,6 +19,39 @@ export default function Table({ employees }: { employees: Employee[] }) {
     // Refresh employee data if needed after state updates
     setEmployeeData(employees);
   }, [employees]);
+
+  const fetchEmployees = useCallback(async (): Promise<Employee[]> => {
+    const res = await fetch('/api/get_employees', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${process.env.API_KEY}`
+      }
+    });
+    return res.json() as Promise<Employee[]>;
+  }, []);
+
+  useEffect(() => {
+    const fetchAndUpdateEmployees = async () => {
+      const updatedEmployees = await fetchEmployees();
+      setEmployeeData(updatedEmployees);
+    };
+
+    fetchAndUpdateEmployees()
+    .catch((error) => {
+      console.error('Error fetching employees:', error);
+    });
+
+    const intervalId = setInterval(() => {
+      (async () => {
+        await fetchAndUpdateEmployees();
+      })()
+      .catch((error) => {
+        console.error('Error fetching employees:', error);
+      });
+    }, 10000);  // Poll every 10 seconds
+
+    return () => clearInterval(intervalId); // Clear interval on component unmount
+  }, [fetchEmployees]);
 
   const handleCheckboxChange = (id: number) => {
     setSelectedIds((prevSelected) =>
@@ -50,14 +83,10 @@ export default function Table({ employees }: { employees: Employee[] }) {
     }
   };
 
-  const fetchEmployees = async (): Promise<Employee[]> => {
-    const res = await fetch('/api/get_employees', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${process.env.API_KEY}`
-      }
-    });
-    return res.json() as Promise<Employee[]>;
+    const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      await handleSubmit();
+    }
   };
 
   const formatTime = (timestamp: Date) => {
@@ -73,13 +102,13 @@ export default function Table({ employees }: { employees: Employee[] }) {
 
   return (
     <div>
-      <table className="w-5/6 m-auto text-center border-collapse text-[42px]">
+      <table className="techtable w-2/3 min-h-[600px] m-auto text-center border-collapse text-[42px]">
         <thead className="bg-gradient-to-br from-[#212121] to-[#333333]">
           <tr>
-            <th className="p-5 border border-[#3e4446] text-[48px]" />
-            <th className="p-2 border border-[#3e4446] text-[48px]">Name</th>
-            <th className="p-2 border border-[#3e4446] text-[48px]">Status</th>
-            <th className="p-2 border border-[#3e4446] text-[48px]">Updated At</th>
+            <th className="tabletitles p-5 border border-[#3e4446] text-[48px]" />
+            <th className="tabletitles p-2 border border-[#3e4446] text-[48px]">Name</th>
+            <th className="tabletitles p-2 border border-[#3e4446] text-[48px]">Status</th>
+            <th className="tabletitles p-2 border border-[#3e4446] text-[48px]">Updated At</th>
           </tr>
         </thead>
         <tbody>
@@ -94,23 +123,27 @@ export default function Table({ employees }: { employees: Employee[] }) {
                 />
               </td>
               <td className="p-1 border border-[#3e4446]">{employee.name}</td>
-              <td className="p-1 border border-[#3e4446]">{employee.status}</td>
-              <td className="p-1 border border-[#3e4446]">{formatTime(employee.updatedAt)}</td>
+              <td className="s-column p-1 border border-[#3e4446]">{employee.status}</td>
+              <td className="ua-column p-1 border border-[#3e4446]">{formatTime(employee.updatedAt)}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div className="m-auto flex flex-row items-center justify-center">
+      <div className="m-auto flex flex-row items-center justify-center py-5">
         <input
           type="text"
           placeholder="New Status"
-          className="w-1/5 p-2 border-none rounded-md"
+          className="min-w-[100px] p-3 border-none rounded-xl text-[#111111] md:text-xl"
           value={status}
           onChange={handleStatusChange}
+          onKeyDown={handleKeyPress}
         />
         <button
           type="submit"
-          className="m-2 px-2 py-5 border-none rounded-md text-center bg-gradient-to-br from-[#484848] to-[#333333]"
+          className="m-2 p-3 border-none rounded-2xl text-center
+            font-semibold md:text-xl hover:text-slate-300
+            hover:bg-gradient-to-bl hover:from-[#484848] hover:to-[#333333]
+            bg-gradient-to-br from-[#595959] to-[#444444]"
           onClick={handleSubmit}
         >
           Update

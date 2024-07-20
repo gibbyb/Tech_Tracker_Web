@@ -67,3 +67,55 @@
     @apply bg-background text-foreground;
   }
 }
+
+@media (min-width: 2000px) {
+  .ua-column {
+    min-width: 500px;
+  }
+  .s-column {
+    max-width: 800px
+  }
+}
+
+@media (max-width: 2000px) {
+  .techtable {
+    width: 90%;
+    font-size: 36;
+  }
+  .tabletitles {
+    font-size: 40;
+  }
+}
+
+@media (min-width: 1500px) {
+  .ua-column {
+    min-width: 400px;
+  }
+}
+
+@media (max-width: 1500px) {
+ .techtable {
+   font-size: 32px;
+ }
+ .tabletitles {
+   font-size:36px;
+ }
+}
+
+@media (min-width: 1000px) {
+  .ua-column {
+    min-width: 300px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .title-text {
+    font-size: 32px;
+  }
+  .techtable {
+   font-size: 20px;
+  }
+  .tabletitles {
+   font-size:24px;
+  }
+}
