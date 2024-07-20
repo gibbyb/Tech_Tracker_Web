@@ -1,4 +1,5 @@
-<img src="https://git.gibbyb.com/gib/Tech_Tracker_Web/raw/branch/master/public/images/tech_tracker_logo.png" alt="Tech Tracker Logo" width="200"/>
+<img src="https://git.gibbyb.com/gib/Tech_Tracker_Web/raw/branch/master/public/images/tech_tracker_logo.png" alt="Tech Tracker Logo" width="100"/>
+
 # Tech Tracker Website
 
 ### [Find Here](https://techtracker.gibbyb.com/)
