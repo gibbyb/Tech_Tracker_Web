@@ -106,7 +106,7 @@ export const legacyGetHistory = async (page: number, perPage: number): Promise<P
   const formattedResults: HistoryEntry[] = historyRows.map(row => ({
     name: row.name,
     status: row.status,
-    time: convertToUTC(new Date(row.updatedAt)),
+    time: new Date(row.updatedAt),
   }));
 
   return {
