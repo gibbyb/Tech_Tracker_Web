@@ -2,12 +2,6 @@ import "server-only";
 import { db } from "~/server/db";
 import { sql } from "drizzle-orm";
 
-// Function to Convert Date to UTC
-const convertToUTC = (date: Date): Date => {
-  const utcDate = new Date(date.setHours(date.getUTCHours() + 24));
-  return utcDate;
-}
-
 // Function to Get Employees
 export const getEmployees = async () => {
   return await db.query.users.findMany({
@@ -21,7 +15,6 @@ export const updateEmployeeStatus = async (employeeIds: string[], newStatus: str
     // Convert array of ids to a format suitable for SQL query (comma-separated string)
     const idList = employeeIds.map(id => parseInt(id, 10));
     const updatedAt = new Date();
-    const utcdate: Date = convertToUTC(updatedAt);
 
     // Prepare the query using drizzle-orm's template-like syntax for escaping variables
     const query = sql`
