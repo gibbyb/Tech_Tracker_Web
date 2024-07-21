@@ -99,7 +99,7 @@ export const legacyGetHistory = async (page: number, perPage: number): Promise<P
   const historyRows = historyResults[0] as unknown as { name: string, status: string, updatedAt: Date }[];
   const countRow = countResults[0] as unknown as { total_count: number }[];
 
-  const totalCount = countRow[0]?.total_count || 0;
+  const totalCount = countRow[0]?.total_count ?? 0;
   const totalPages = Math.ceil(totalCount / perPage);
 
   // Format and map results
