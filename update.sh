@@ -1,5 +1,5 @@
-sudo docker restart tt_web
+sudo docker restart techtracker
 cd ~/Documents/Web/Tech_Tracker_Web
 git pull
-sudo docker exec tt_web /home/node/.local/share/pnpm/pnpm build 
-sudo docker exec tt_web /home/node/.local/share/pnpm/pnpm start &
+sudo docker exec techtracker /home/node/.local/share/pnpm/pnpm build 
+sudo docker exec techtracker /home/node/.local/share/pnpm/pnpm start &
