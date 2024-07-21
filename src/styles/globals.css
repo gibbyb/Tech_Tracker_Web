@@ -110,12 +110,12 @@
 
 @media (max-width: 1000px) {
   .title-text {
-    font-size: 32px;
+    font-size: 24px;
   }
   .techtable {
-   font-size: 20px;
+   font-size: 16px;
   }
   .tabletitles {
-   font-size:24px;
+   font-size:18px;
   }
 }

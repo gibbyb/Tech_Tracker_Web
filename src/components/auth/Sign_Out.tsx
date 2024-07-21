@@ -10,15 +10,21 @@ export default async function Sign_Out() {
     // Add User profile picture next to Sign Out button
     const pfp = session?.user?.image ? session.user.image : "/images/default_user_pfp.png";
     return (
-      <form className="w-full flex flex-row pt-4 pr-8"
+      <form className="w-full flex flex-row pt-2 pr-0 md:pt-4 md:pr-8"
         action={async () => {
           "use server"
           await signOut()
         }}>
         <Image src={pfp} alt="" width={35} height={35}
-          className="rounded-full border-2 border-white m-auto mr-4"
+          className="rounded-full border-2 border-white m-auto mr-1 md:mr-2
+          max-w-[25px] md:max-w-[35px]"
         />
-        <button type="submit" className="w-full">Sign Out</button>
+        <button type="submit" className="w-full p-2 rounded-xl text-sm md:text-lg
+          bg-gradient-to-tl from-[#35363F] to=[#24191A]
+          hover:bg-gradient-to-tr hover:from-[#35363F] hover:to-[#23242F]"
+        >
+          Sign Out
+        </button>
       </form>
     );
   }

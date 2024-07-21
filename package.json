@@ -12,7 +12,7 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "go": "next build && next start"
+    "go": "git pull && next build && next start"
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.10.1",
