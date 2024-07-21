@@ -9,16 +9,19 @@ export const getEmployees = async () => {
   });
 };
 
-const convertToUTC = (date: Date) => {
-  return new Date(date.setHours(date.getUTCHours())+ 5);
-};
+// Uncomment this and change updatedAt below if using localhost and you want correct time.
+// I dont know why it is like this.
+//const convertToUTC = (date: Date) => {
+  //return new Date(date.setHours(date.getUTCHours())+ 5);
+//};
 
 // Function to Update Employee Status using Raw SQL
 export const updateEmployeeStatus = async (employeeIds: string[], newStatus: string) => {
   try {
     // Convert array of ids to a format suitable for SQL query (comma-separated string)
     const idList = employeeIds.map(id => parseInt(id, 10));
-    const updatedAt = convertToUTC(new Date());
+    //const updatedAt = convertToUTC(new Date());
+    const updatedAt = new Date(); // Do not change for PROD! It acts different on PROD
 
     // Prepare the query using drizzle-orm's template-like syntax for escaping variables
     const query = sql`
