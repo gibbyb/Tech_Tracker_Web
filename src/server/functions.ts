@@ -2,6 +2,12 @@ import "server-only";
 import { db } from "~/server/db";
 import { sql } from "drizzle-orm";
 
+// Function to Convert Date to UTC
+const convertToUTC = (date: Date): Date => {
+  const utcDate = new Date(date.setHours(date.getUTCHours() + 24));
+  return utcDate;
+}
+
 // Function to Get Employees
 export const getEmployees = async () => {
   return await db.query.users.findMany({
@@ -15,6 +21,7 @@ export const updateEmployeeStatus = async (employeeIds: string[], newStatus: str
     // Convert array of ids to a format suitable for SQL query (comma-separated string)
     const idList = employeeIds.map(id => parseInt(id, 10));
     const updatedAt = new Date();
+    const utcdate: Date = convertToUTC(updatedAt);
 
     // Prepare the query using drizzle-orm's template-like syntax for escaping variables
     const query = sql`
@@ -52,12 +59,6 @@ interface PaginatedHistory {
   }
 }
 
-// Function to Convert Date to UTC
-const convertToUTC = (date: Date): Date => {
-  const utcDate = new Date(date.setHours(date.getUTCHours() - 12));
-  return utcDate;
-}
-
 export const legacyGetEmployees = async () => {
   const employees = await db.query.users.findMany({
     orderBy: (model, { asc }) => asc(model.id),
@@ -67,7 +68,7 @@ export const legacyGetEmployees = async () => {
   }
   for (const employee of employees) {
     const date = new Date(employee.updatedAt);
-    employee.updatedAt = convertToUTC(date);
+    employee.updatedAt = date;
   }
   return employees;
 };
@@ -126,7 +127,7 @@ export const legacyUpdateEmployeeStatusByName = async (technicians: { name: stri
     // Prepare and execute the queries for each technician
     for (const technician of technicians) {
       const { name, status } = technician;
-      const utcdate: Date = convertToUTC(new Date());
+      const utcdate: Date = new Date();
       const query = sql`
         UPDATE users
         SET status = ${status}, updatedAt = ${utcdate}
