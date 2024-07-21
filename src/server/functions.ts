@@ -127,7 +127,7 @@ export const legacyUpdateEmployeeStatusByName = async (technicians: { name: stri
     for (const technician of technicians) {
       const { name, status } = technician;
       const date = new Date();
-      const utcdate: Date = new Date(date.setHours(date.getUTCHours() + 15));
+      const utcdate: Date = new Date(date.setHours(date.getUTCHours() - 12));
       const query = sql`
         UPDATE users
         SET status = ${status}, updatedAt = ${utcdate}
