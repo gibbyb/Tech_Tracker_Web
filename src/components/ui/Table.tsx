@@ -22,7 +22,7 @@ export default function Table({ employees }: { employees: Employee[] }) {
   }, [employees]);
 
   const fetchEmployees = useCallback(async (): Promise<Employee[]> => {
-    const res = await fetch('/api/get_employees', {
+    const res = await fetch('/api/v2/get_employees', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${process.env.API_KEY}`
@@ -86,7 +86,7 @@ export default function Table({ employees }: { employees: Employee[] }) {
 
   const handleSubmit = async () => {
     if (selectedIds.length > 0 && status.trim() !== '') {
-      await fetch('/api/update_status', {
+      await fetch('/api/v2/update_status', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

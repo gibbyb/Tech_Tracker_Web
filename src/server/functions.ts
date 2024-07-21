@@ -32,3 +32,114 @@ export const updateEmployeeStatus = async (employeeIds: string[], newStatus: str
     throw new Error("Failed to update status");
   }
 };
+
+// Legacy Functions for Legacy API for iOS App
+
+// Type definitions
+interface HistoryEntry {
+  name: string;
+  status: string;
+  time: Date;
+}
+
+interface PaginatedHistory {
+  data: HistoryEntry[];
+  meta: {
+    current_page: number;
+    per_page: number;
+    total_pages: number;
+    total_count: number;
+  }
+}
+
+// Function to Convert Date to UTC
+const convertToUTC = (date: Date): Date => {
+  const utcDate = new Date(date.setHours(date.getUTCHours() - 15));
+  return utcDate;
+}
+
+export const legacyGetEmployees = async () => {
+  const employees = await db.query.users.findMany({
+    orderBy: (model, { asc }) => asc(model.id),
+  });
+  if (employees.length === 0) {
+    return [];
+  }
+  for (const employee of employees) {
+    const date = new Date(employee.updatedAt);
+    employee.updatedAt = convertToUTC(date);
+  }
+  return employees;
+};
+
+// Function to Get History Data with Pagination using Raw SQL
+export const legacyGetHistory = async (page: number, perPage: number): Promise<PaginatedHistory> => {
+  const offset = (page - 1) * perPage;
+
+  // Raw SQL queries
+  const historyQuery = sql`
+    SELECT u.name, h.status, h.updatedAt
+    FROM history h
+    JOIN users u ON h.user_id = u.id
+    ORDER BY h.id DESC
+    LIMIT ${perPage} OFFSET ${offset}
+  `;
+  
+  const countQuery = sql`
+    SELECT COUNT(*) AS total_count
+    FROM history
+  `;
+
+  const [historyResults, countResults] = await Promise.all([
+    db.execute(historyQuery), 
+    db.execute(countQuery),
+  ]);
+
+  // Get the results properly as an array of rows
+  const historyRows = historyResults[0] as { name: string, status: string, updatedAt: Date }[];
+  const countRow = countResults[0] as { total_count: number }[];
+
+  const totalCount = countRow[0]?.total_count || 0;
+  const totalPages = Math.ceil(totalCount / perPage);
+
+  // Format and map results
+  const formattedResults: HistoryEntry[] = historyRows.map(row => ({
+    name: row.name,
+    status: row.status,
+    time: convertToUTC(new Date(row.updatedAt)),
+  }));
+
+  return {
+    data: formattedResults,
+    meta: {
+      current_page: page,
+      per_page: perPage,
+      total_pages: totalPages,
+      total_count: totalCount,
+    }
+  };
+};
+
+// Function to Update Employee Status by Name using Raw SQL
+export const legacyUpdateEmployeeStatusByName = async (technicians: { name: string, status: string }[]) => {
+  try {
+    // Prepare and execute the queries for each technician
+    for (const technician of technicians) {
+      const { name, status } = technician;
+      const date = new Date();
+      const utcdate: Date = new Date(date.setHours(date.getUTCHours() - 12));
+      const query = sql`
+        UPDATE users
+        SET status = ${status}, updatedAt = ${utcdate}
+        WHERE name = ${name}
+      `;
+
+      await db.execute(query);
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating employee status by name:", error);
+    throw new Error("Failed to update status by name");
+  }
+};
