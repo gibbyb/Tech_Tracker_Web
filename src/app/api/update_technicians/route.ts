@@ -15,6 +15,11 @@ const isTechnician = (technician: unknown): technician is Technician => {
          'status' in technician && typeof (technician as Technician).status === 'string';
 };
 
+// Ensure the body is properly typed
+interface RequestBody {
+  technicians: Technician[];
+}
+
 export const POST = async (request: Request) => {
   try {
     const url = new URL(request.url);
@@ -23,15 +28,16 @@ export const POST = async (request: Request) => {
     if (apiKey !== 'zAf4vYVN2pszrK') {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
-
-    const body = await request.json();
-
-    if (!body || !Array.isArray(body.technicians)) {
+    
+    const body: unknown = await request.json();
+    
+    // Type assert body to RequestBody only after validation
+    if (typeof body !== 'object' || body === null || !Array.isArray((body as { technicians?: unknown }).technicians)) {
       return NextResponse.json({ message: 'Invalid input: expecting an array of technicians.' }, { status: 400 });
     }
-
-    const technicians: unknown[] = body.technicians;
-
+    
+    const technicians: unknown[] = (body as { technicians: unknown }).technicians;
+    
     if (!technicians.every(isTechnician)) {
       return NextResponse.json({ message: 'Invalid input: missing name or status for a technician.' }, { status: 400 });
     }
