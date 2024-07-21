@@ -8,7 +8,22 @@ import { type Metadata } from "next";
 export const metadata: Metadata = {
   title: "Tech Tracker",
   description: "App used by COG IT employees to update their status throughout the day.",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [
+    {
+      rel: 'icon',
+      url: '/favicon.ico',
+    },
+    {
+      rel: 'icon',
+      type: 'image/png',
+      sizes: '32x32',
+      url: '/images/tech_tracker_favicon.png',
+    },
+    {
+      rel: 'apple-touch-icon',
+      url: '/favicon.ico',
+    },
+  ],
 };
 
 const fontSans = FontSans({

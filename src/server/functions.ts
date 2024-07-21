@@ -9,12 +9,16 @@ export const getEmployees = async () => {
   });
 };
 
+const convertToUTC = (date: Date) => {
+  return new Date(date.setHours(date.getUTCHours())+ 5);
+};
+
 // Function to Update Employee Status using Raw SQL
 export const updateEmployeeStatus = async (employeeIds: string[], newStatus: string) => {
   try {
     // Convert array of ids to a format suitable for SQL query (comma-separated string)
     const idList = employeeIds.map(id => parseInt(id, 10));
-    const updatedAt = new Date();
+    const updatedAt = convertToUTC(new Date());
 
     // Prepare the query using drizzle-orm's template-like syntax for escaping variables
     const query = sql`
