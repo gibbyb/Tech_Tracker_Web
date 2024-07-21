@@ -54,7 +54,7 @@ interface PaginatedHistory {
 
 // Function to Convert Date to UTC
 const convertToUTC = (date: Date): Date => {
-  const utcDate = new Date(date.setHours(date.getUTCHours() - 15));
+  const utcDate = new Date(date.setHours(date.getUTCHours() - 12));
   return utcDate;
 }
 
@@ -126,8 +126,7 @@ export const legacyUpdateEmployeeStatusByName = async (technicians: { name: stri
     // Prepare and execute the queries for each technician
     for (const technician of technicians) {
       const { name, status } = technician;
-      const date = new Date();
-      const utcdate: Date = new Date(date.setHours(date.getUTCHours() - 12));
+      const utcdate: Date = convertToUTC(new Date());
       const query = sql`
         UPDATE users
         SET status = ${status}, updatedAt = ${utcdate}
