@@ -15,11 +15,6 @@ const isTechnician = (technician: unknown): technician is Technician => {
          'status' in technician && typeof (technician as Technician).status === 'string';
 };
 
-// Ensure the body is properly typed
-interface RequestBody {
-  technicians: Technician[];
-}
-
 export const POST = async (request: Request) => {
   try {
     const url = new URL(request.url);
@@ -42,7 +37,7 @@ export const POST = async (request: Request) => {
       return NextResponse.json({ message: 'Invalid input: missing name or status for a technician.' }, { status: 400 });
     }
 
-    await legacyUpdateEmployeeStatusByName(technicians as Technician[]);
+    await legacyUpdateEmployeeStatusByName(technicians);
 
     return NextResponse.json({ message: 'Technicians updated successfully.' }, { status: 200 });
   } catch (error) {
