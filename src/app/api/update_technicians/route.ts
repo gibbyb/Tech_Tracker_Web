@@ -28,16 +28,16 @@ export const POST = async (request: Request) => {
     if (apiKey !== 'zAf4vYVN2pszrK') {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
-    
+
     const body: unknown = await request.json();
-    
-    // Type assert body to RequestBody only after validation
-    if (typeof body !== 'object' || body === null || !Array.isArray((body as { technicians?: unknown }).technicians)) {
+
+    // Validate the body and its technicians property
+    if (typeof body !== 'object' || body === null || !Array.isArray((body as { technicians?: unknown[] }).technicians)) {
       return NextResponse.json({ message: 'Invalid input: expecting an array of technicians.' }, { status: 400 });
     }
-    
-    const technicians: unknown[] = (body as { technicians: unknown }).technicians;
-    
+
+    const technicians = (body as { technicians: unknown[] }).technicians;
+
     if (!technicians.every(isTechnician)) {
       return NextResponse.json({ message: 'Invalid input: missing name or status for a technician.' }, { status: 400 });
     }
