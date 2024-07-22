@@ -182,13 +182,13 @@ export default function Table({ employees }: { employees: Employee[] }) {
                     onChange={() => handleCheckboxChange(employee.id)}
                   />
                 </td>
-                <td className="n-column px-1 md:py-5 border border-[#3e4446]">
+                <td className="n-column px-1 md:py-3 border border-[#3e4446]">
                   {employee.name}
                 </td>
-                <td className="s-column px-1 md:py-5 border border-[#3e4446]">
+                <td className="s-column px-1 md:py-3 border border-[#3e4446]">
                   {employee.status}
                 </td>
-                <td className="ua-column px-1 md:py-5 border border-[#3e4446]">
+                <td className="ua-column px-1 md:py-3 border border-[#3e4446]">
                   {formatTime(employee.updatedAt)}
                 </td>
               </tr>
