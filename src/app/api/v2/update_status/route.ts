@@ -12,19 +12,27 @@ type UpdateStatusBody = {
 export const POST = async (req: NextRequest) => {
   const session = await auth();
   if (!session) 
-    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-
+    return NextResponse.json(
+      { message: 'Unauthorized' },
+      { status: 401 }
+    );
   const { employeeIds, newStatus } = await req.json() as UpdateStatusBody;
-
-  if (!Array.isArray(employeeIds) || typeof newStatus !== 'string') {
-    return NextResponse.json({ message: 'Invalid input' }, { status: 400 });
-  }
-
+  if (!Array.isArray(employeeIds) || typeof newStatus !== 'string')
+    return NextResponse.json(
+      { message: 'Invalid input' },
+      { status: 400 }
+    );
   try {
     await updateEmployeeStatus(employeeIds, newStatus);
-    return NextResponse.json({ message: 'Status updated successfully' }, { status: 200 });
+    return NextResponse.json(
+      { message: 'Status updated successfully' },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Error updating status:', error);
-    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 };

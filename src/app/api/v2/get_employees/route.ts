@@ -1,5 +1,4 @@
 "use server";
-
 import { NextResponse } from 'next/server';
 import { getEmployees } from '~/server/functions';
 import { auth } from '~/auth';

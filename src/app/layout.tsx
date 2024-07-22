@@ -7,7 +7,8 @@ import Sign_Out from "~/components/auth/Sign_Out";
 import { type Metadata } from "next";
 export const metadata: Metadata = {
   title: "Tech Tracker",
-  description: "App used by COG IT employees to update their status throughout the day.",
+  description: "App used by COG IT employees to \
+    update their status throughout the day.",
   icons: [
     {
       rel: 'icon',
