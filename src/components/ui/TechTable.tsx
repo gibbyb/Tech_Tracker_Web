@@ -11,7 +11,7 @@ interface Employee {
   updatedAt: Date;
 }
 
-export default function Table({ employees }: { employees: Employee[] }) {
+export default function TechTable({ employees }: { employees: Employee[] }) {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(true);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -158,7 +158,7 @@ export default function Table({ employees }: { employees: Employee[] }) {
               <th className="py-3 px-4 border border-[#3e4446]">
                 <input
                   type="checkbox"
-                  className="m-auto cursor-pointer transform scale-150"
+                  className="m-auto cursor-pointer scale-150"
                   checked={selectAll}
                   onChange={handleSelectAllChange}
                 />
@@ -177,7 +177,7 @@ export default function Table({ employees }: { employees: Employee[] }) {
                 <td className="p-1 border border-[#3e4446]">
                   <input
                     type="checkbox"
-                    className="m-0 cursor-pointer transform scale-150"
+                    className="m-auto cursor-pointer scale-150"
                     checked={selectedIds.includes(employee.id)}
                     onChange={() => handleCheckboxChange(employee.id)}
                   />

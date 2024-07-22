@@ -1,14 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import Sign_In from "~/components/auth/Sign_In";
-import TT_Header from "~/components/ui/TT_Header";
+import Header from "~/components/ui/Header";
 
 export default function No_Session() {
   return (
     <main className="w-full min-h-screen mx-auto text-center pt-2 md:pt-10
       bg-gradient-to-b from-[#111111] to-[#212325]">
       <div className="w-2/3 pt-4 pb-2 md:pt-8 md:pb-4 m-auto">
-        <TT_Header />
+        < Header />
       </div>
       < Sign_In />
       <div className="w-5/6 mx-auto flex flex-col">

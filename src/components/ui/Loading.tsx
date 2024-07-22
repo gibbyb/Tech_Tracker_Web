@@ -1,6 +1,6 @@
 "use client"
 import * as React from "react"
-import { Progress } from "~/components/ui/progress"
+import { Progress } from "~/components/ui/shadcn/progress"
 
 interface Loading_Props {
   interval_amount: number

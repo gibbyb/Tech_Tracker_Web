@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function TT_Header() {
+export default function Header() {
   return (
     <header className="w-full py-2 pt-6 md:py-5">
       <div className="flex flex-row items-center text-center
