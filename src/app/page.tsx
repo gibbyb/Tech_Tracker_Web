@@ -1,6 +1,6 @@
 "use server";
 import { auth } from "~/auth";
-import No_Session from "~/components/auth/No_Session";
+import No_Session from "~/components/ui/No_Session";
 import Header from "~/components/ui/Header";
 import { getEmployees } from "~/server/functions";
 import TechTable from "~/components/ui/TechTable";
