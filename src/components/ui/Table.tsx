@@ -103,7 +103,14 @@ const handleSubmit = async () => {
   if (selectedIds.length === 0 && employeeStatus.trim() !== '') {
     const cur_user = employees.find(employee => employee.name === session.user?.name);
     if (cur_user) {
-      setSelectedIds([cur_user.id]);
+      await fetch('/api/v2/update_status', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.API_KEY}`
+        },
+        body: JSON.stringify({ employeeIds: [cur_user.id], newStatus: employeeStatus }),
+      });
     }
   } else if (employeeStatus.trim() !== '') {
     await fetch('/api/v2/update_status', {
@@ -114,13 +121,12 @@ const handleSubmit = async () => {
       },
       body: JSON.stringify({ employeeIds: selectedIds, newStatus: employeeStatus }),
     });
-
-    // Optionally refresh data on the client-side after update
-    const updatedEmployees = await fetchEmployees();
-    setEmployeeData(updatedEmployees);
-    setSelectedIds([]);
-    setStatus('');
   }
+  // Optionally refresh data on the client-side after update
+  const updatedEmployees = await fetchEmployees();
+  setEmployeeData(updatedEmployees);
+  setSelectedIds([]);
+  setStatus('');
 };
 
     const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
