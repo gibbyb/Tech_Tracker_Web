@@ -94,45 +94,34 @@ export default function Table({ employees }: { employees: Employee[] }) {
     setStatus(e.target.value);
   };
 
-  const handleSubmit = async () => {
-    if (selectedIds.length === 0) {
-      if (!session) {
-        alert("You must be signed in to update status.");
-        return;
-      } else {
-      const cur_user = employees.find(employee => employee.name === session?.user?.name);
-        if (cur_user) {
-          await fetch('/api/v2/update_status', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${process.env.API_KEY}`
-            },
-            body: JSON.stringify({ employeeIds: [cur_user.id], newStatus: employeeStatus }),
-          });
-          // Optionally refresh data on the client-side after update
-          const updatedEmployees = await fetchEmployees();
-          setEmployeeData(updatedEmployees);
-          setSelectedIds([]);
-          setStatus('');
-        }
-      }
-    } else if (employeeStatus.trim() === '') {
-      await fetch('/api/v2/update_status', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.API_KEY}`
-        },
-        body: JSON.stringify({ employeeIds: selectedIds, newStatus: employeeStatus }),
-      });
-      // Optionally refresh data on the client-side after update
-      const updatedEmployees = await fetchEmployees();
-      setEmployeeData(updatedEmployees);
-      setSelectedIds([]);
-      setStatus('');
+const handleSubmit = async () => {
+  if (!session) {
+    alert("You must be signed in to update status.");
+    return;
+  }
+  // If no employee is selected and status is not empty
+  if (selectedIds.length === 0 && employeeStatus.trim() !== '') {
+    const cur_user = employees.find(employee => employee.name === session.user?.name);
+    if (cur_user) {
+      setSelectedIds([cur_user.id]);
     }
-  };
+  } else if (employeeStatus.trim() !== '') {
+    await fetch('/api/v2/update_status', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.API_KEY}`
+      },
+      body: JSON.stringify({ employeeIds: selectedIds, newStatus: employeeStatus }),
+    });
+
+    // Optionally refresh data on the client-side after update
+    const updatedEmployees = await fetchEmployees();
+    setEmployeeData(updatedEmployees);
+    setSelectedIds([]);
+    setStatus('');
+  }
+};
 
     const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
