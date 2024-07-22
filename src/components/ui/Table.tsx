@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import { useSession } from "next-auth/react";
+import Loading from "~/components/ui/Loading";
 
 // Define the Employee interface to match data fetched on the server
 interface Employee {
@@ -94,7 +95,29 @@ export default function Table({ employees }: { employees: Employee[] }) {
   };
 
   const handleSubmit = async () => {
-    if (selectedIds.length > 0 && employeeStatus.trim() !== '') {
+    if (selectedIds.length === 0) {
+      if (!session) {
+        alert("You must be signed in to update status.");
+        return;
+      } else {
+      const cur_user = employees.find(employee => employee.name === session?.user?.name);
+        if (cur_user) {
+          await fetch('/api/v2/update_status', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${process.env.API_KEY}`
+            },
+            body: JSON.stringify({ employeeIds: [cur_user.id], newStatus: employeeStatus }),
+          });
+          // Optionally refresh data on the client-side after update
+          const updatedEmployees = await fetchEmployees();
+          setEmployeeData(updatedEmployees);
+          setSelectedIds([]);
+          setStatus('');
+        }
+      }
+    } else if (employeeStatus.trim() === '') {
       await fetch('/api/v2/update_status', {
         method: 'POST',
         headers: {
@@ -108,31 +131,6 @@ export default function Table({ employees }: { employees: Employee[] }) {
       setEmployeeData(updatedEmployees);
       setSelectedIds([]);
       setStatus('');
-    } else {
-      if (!session) {
-        alert("You must be signed in to update status.");
-      } else {
-        const usersName = session?.user?.name;
-        const employee = employees.find(employee => employee.name === usersName);
-        if (employee) {
-          setSelectedIds([employee.id]);
-          if (selectedIds.length > 0 && employeeStatus.trim() !== '') {
-            await fetch('/api/v2/update_status', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.API_KEY}`
-              },
-              body: JSON.stringify({ employeeIds: selectedIds, newStatus: employeeStatus }),
-            });
-            // Optionally refresh data on the client-side after update
-            const updatedEmployees = await fetchEmployees();
-            setEmployeeData(updatedEmployees);
-            setSelectedIds([]);
-            setStatus('');
-          }
-        }
-      }
     }
   };
 
@@ -152,7 +150,7 @@ export default function Table({ employees }: { employees: Employee[] }) {
     const month = date.toLocaleString('default', { month: 'long' });
     return `${time} - ${month} ${day}`;
   };
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loading interval_amount={3} />;
   return (
     <div>
       <table className="techtable rounded-2xl w-5/6 m-auto text-center text-[42px]">
