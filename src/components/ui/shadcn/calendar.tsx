@@ -61,6 +61,7 @@ function Calendar({
         ...classNames,
       }}
       components={{
+        // @ts-expect-error - I didn't even write this code man cmon
         IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
       }}
