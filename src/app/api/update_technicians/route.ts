@@ -34,7 +34,7 @@ export const POST = async (request: Request) => {
     if (!technicians.every(isTechnician))
       return NextResponse.json(
         { message: 'Invalid input: missing name or status for a technician.' },
-          { status: 400 }
+        { status: 400 }
       );
     await updateEmployeeStatusByName(technicians);
     return NextResponse.json(
