@@ -163,9 +163,9 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
                   />
                 </th>
               )}
-              <th className="border border-[#3e4446]">Name</th>
-              <th className="border border-[#3e4446]">Status</th>
-              <th className="border border-[#3e4446]">Updated At</th>
+              <th className="border border-[#3e4446] py-3">Name</th>
+              <th className="border border-[#3e4446] py-3">Status</th>
+              <th className="border border-[#3e4446] py-3">Updated At</th>
             </tr>
           </thead>
           <tbody>
