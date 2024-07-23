@@ -16,7 +16,7 @@ export default function Header() {
     );
   } else {
     return (
-      <header className="w-full py-2 pt-6 md:py-5">
+      <header className="w-full h-[20vh] py-2 pt-6 md:py-5">
         <div className="absolute top-4 right-6">
           <div className="flex flex-row my-auto items-center pt-2 pr-0 md:pt-4 md:pr-8">
             < TV_Toggle />

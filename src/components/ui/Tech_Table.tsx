@@ -148,18 +148,21 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
   else {
     return (
       <div className={`techtable-wrapper ${tvMode ? 'content-fullscreen' : ''}`}>
-        <table className={`techtable rounded-2xl m-auto text-center text-[42px] ${tvMode ? 'techtable-fullscreen' : 'w-5/6'}`}>
+        <table className={`techtable rounded-2xl m-auto text-center text-[42px]
+          ${tvMode ? 'techtable-fullscreen' : 'w-5/6'}`}>
           <thead className="tabletitles border border-[#3e4446] bg-gradient-to-b
             from-[#282828] to-[#383838] text-[48px]">
             <tr>
-              <th className="py-3 px-4 border border-[#3e4446]">
-                <input
-                  type="checkbox"
-                  className="m-auto cursor-pointer scale-150"
-                  checked={selectAll}
-                  onChange={handleSelectAllChange}
-                />
-              </th>
+              {!tvMode && (
+                <th className="py-3 px-6 border border-[#3e4446]">
+                  <input
+                    type="checkbox"
+                    className="m-auto cursor-pointer scale-150"
+                    checked={selectAll}
+                    onChange={handleSelectAllChange}
+                  />
+                </th>
+              )}
               <th className="border border-[#3e4446]">Name</th>
               <th className="border border-[#3e4446]">Status</th>
               <th className="border border-[#3e4446]">Updated At</th>
@@ -172,6 +175,7 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
                   odd:bg-gradient-to-bl odd:from-[#252525] odd:to-[#212125]"
                 key={employee.id}
               >
+              {!tvMode && (
                 <td className="p-1 border border-[#3e4446]">
                   <input
                     type="checkbox"
@@ -180,10 +184,11 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
                     onChange={() => handleCheckboxChange(employee.id)}
                   />
                 </td>
+              )}
                 <td className="n-column px-1 md:py-3 border border-[#3e4446]">
                   {employee.name}
                 </td>
-                <td className="s-column px-1 md:py-3 border border-[#3e4446]">
+                <td className="s-column max-w-[1000px] px-1 md:py-3 border border-[#3e4446]">
                   {employee.status}
                 </td>
                 <td className="ua-column px-1 md:py-3 border border-[#3e4446]">
