@@ -1,5 +1,5 @@
 "use client";
-import { Switch } from "~/components/ui/shadcn/switch";
+import Image from "next/image";
 import { useTVMode } from "~/components/context/TVModeContext";
 import { useSession } from "next-auth/react";
 
@@ -8,12 +8,16 @@ export default function TV_Toggle() {
   const { data: session } = useSession();
   if (!session) return <div/>;
   return (
-    <Switch
-      checked={tvMode}
-      onCheckedChange={toggleTVMode}
-      className="bg-gradient-to-br from-[#595959] to-[#444444]
-        hover:bg-gradient-to-bl hover:from-[#484848] hover:to-[#333333]
-        mx-4 mt-2"
-    />
+    <button onClick={toggleTVMode} className="mr-4 mt-1">
+      {tvMode ? (
+        <Image src="/images/exit_fullscreen.png" alt="Exit TV Mode"
+          width={25} height={25}
+        />
+      ) : (
+        <Image src="/images/fullscreen.png" alt="Enter TV Mode"
+          width={25} height={25}
+        />
+      )}
+    </button>
   );
 }

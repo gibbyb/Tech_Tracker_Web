@@ -8,11 +8,11 @@ export default function Header() {
   const { tvMode } = useTVMode();
   if (tvMode) {
     return (
-        <div className="absolute top-4 right-2">
-          <div className="flex flex-row my-auto items-center pt-2 pr-0 md:pt-4">
-            < TV_Toggle />
-          </div>
+      <div className="absolute top-4 right-2">
+        <div className="flex flex-row my-auto items-center pt-2 pr-0 md:pt-4">
+          < TV_Toggle />
         </div>
+      </div>
     );
   } else {
     return (

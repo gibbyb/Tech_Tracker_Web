@@ -15,10 +15,8 @@ export default function Sign_Out() {
           className="rounded-full border-2 border-white m-auto mr-1 md:mr-2
           max-w-[25px] md:max-w-[35px]"
         />
-        <Button onClick={() => signOut()}
+        <Button onClick={() => signOut()} variant="secondary"
           className="w-full p-2 rounded-xl text-sm md:text-lg"
-          //bg-gradient-to-tl from-[#35363F] to=[#24191A]
-          //hover:bg-gradient-to-tr hover:from-[#35363F] hover:to-[#23242F]"
         >
           Sign Out
         </Button>
@@ -26,5 +24,3 @@ export default function Sign_Out() {
     );
   }
 };
-
-        //<User_Avatar session={session} />
