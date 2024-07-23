@@ -35,6 +35,9 @@ export const GET = async (request: Request) => {
     }
   } catch (error) {
     console.error('Error fetching employees:', error);
-    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 };
