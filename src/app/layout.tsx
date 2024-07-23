@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     },
     {
       rel: 'apple-touch-icon',
-      url: '/favicon.ico',
+      url: '/imges/tech_tracker_appicon.png',
     },
   ],
 };
