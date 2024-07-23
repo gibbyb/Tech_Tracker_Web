@@ -1,7 +1,8 @@
-'use client';
+"use client";
 import { useState, useEffect, useCallback } from 'react';
 import { useSession } from "next-auth/react";
 import Loading from "~/components/ui/Loading";
+import { useTVMode } from "~/components/context/TVModeContext";
 
 // Define the Employee interface to match data fetched on the server
 interface Employee {
@@ -11,8 +12,9 @@ interface Employee {
   updatedAt: Date;
 }
 
-export default function TechTable({ employees }: { employees: Employee[] }) {
+export default function Tech_Table({ employees }: { employees: Employee[] }) {
   const { data: session, status } = useSession();
+  const { tvMode } = useTVMode();
   const [loading, setLoading] = useState(true);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -34,7 +36,7 @@ export default function TechTable({ employees }: { employees: Employee[] }) {
       alert("You must be signed in to update status.");
       return;
     }
-    // If no employee is selected and status is not empty
+    
     if (selectedIds.length === 0 && employeeStatus.trim() !== '') {
       const cur_user = employees.find(employee => employee.name === session.user?.name);
       if (cur_user) {
@@ -57,6 +59,7 @@ export default function TechTable({ employees }: { employees: Employee[] }) {
         body: JSON.stringify({ employeeIds: selectedIds, newStatus: employeeStatus }),
       });
     }
+    
     const updatedEmployees = await fetch_employees();
     setEmployeeData(updatedEmployees);
     setSelectedIds([]);
@@ -88,11 +91,9 @@ export default function TechTable({ employees }: { employees: Employee[] }) {
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       await update_status();
-      // if key is i then focus text input
     }
   };
 
-  // Format time for display
   const formatTime = (timestamp: Date) => {
     const date = new Date(timestamp);
     const time = date.toLocaleTimeString('en-US', {
@@ -104,41 +105,37 @@ export default function TechTable({ employees }: { employees: Employee[] }) {
     return `${time} - ${month} ${day}`;
   };
 
-  // Loading bar while we wait for auth
   useEffect(() => {
     if (status !== "loading") {
       setLoading(false);
     }
-    }, [status]);
+  }, [status]);
 
-  // Refresh employee data if needed after state updates
   useEffect(() => {
     setEmployeeData(employees);
   }, [employees]);
 
-  // Fetch employees from the server every 10 seconds
   useEffect(() => {
     const fetchAndUpdateEmployees = async () => {
       const updatedEmployees = await fetch_employees();
       setEmployeeData(updatedEmployees);
     };
-    fetchAndUpdateEmployees()
-    .catch((error) => {
+    
+    fetchAndUpdateEmployees().catch((error) => {
       console.error('Error fetching employees:', error);
     });
+
     const intervalId = setInterval(() => {
       (async () => {
         await fetchAndUpdateEmployees();
-      })()
-      .catch((error) => {
+      })().catch((error) => {
         console.error('Error fetching employees:', error);
       });
-    }, 10000);  // Poll every 10 seconds
-
-    return () => clearInterval(intervalId); // Clear interval on component unmount
+    }, 10000);
+    
+    return () => clearInterval(intervalId);
   }, [fetch_employees]);
 
-  // Handle checkbox changes
   useEffect(() => {
     if (selectedIds.length === employeeData.length && employeeData.length > 0) {
       setSelectAll(true);
@@ -150,10 +147,10 @@ export default function TechTable({ employees }: { employees: Employee[] }) {
   if (loading) return <Loading interval_amount={3} />;
   else {
     return (
-      <div>
-        <table className="techtable rounded-2xl w-5/6 m-auto text-center text-[42px]">
-          <thead className="tabletitles border border-[#3e4446]
-            bg-gradient-to-b from-[#282828] to-[#383838] text-[48px]">
+      <div className={`techtable-wrapper ${tvMode ? 'content-fullscreen' : ''}`}>
+        <table className={`techtable rounded-2xl m-auto text-center text-[42px] ${tvMode ? 'techtable-fullscreen' : 'w-5/6'}`}>
+          <thead className="tabletitles border border-[#3e4446] bg-gradient-to-b
+            from-[#282828] to-[#383838] text-[48px]">
             <tr>
               <th className="py-3 px-4 border border-[#3e4446]">
                 <input
@@ -170,8 +167,9 @@ export default function TechTable({ employees }: { employees: Employee[] }) {
           </thead>
           <tbody>
             {employeeData.map((employee) => (
-              <tr className="even:bg-gradient-to-br from-[#272727] to-[#313131]
-                odd:bg-gradient-to-bl odd:from-[#252525] odd:to-[#212125]"
+              <tr
+                className="even:bg-gradient-to-br from-[#272727] to-[#313131]
+                  odd:bg-gradient-to-bl odd:from-[#252525] odd:to-[#212125]"
                 key={employee.id}
               >
                 <td className="p-1 border border-[#3e4446]">
@@ -195,28 +193,30 @@ export default function TechTable({ employees }: { employees: Employee[] }) {
             ))}
           </tbody>
         </table>
-        <div className="m-auto flex flex-row items-center justify-center py-5">
-          <input
-            autoFocus
-            type="text"
-            placeholder="New Status"
-            className="min-w-[120px] lg:min-w-[400px] bg-[#F9F6EE]
-              py-2 px-3 border-none rounded-xl text-[#111111] lg:text-2xl"
-            value={employeeStatus}
-            onChange={handleStatusChange}
-            onKeyDown={handleKeyDown}
-          />
-          <button
-            type="submit"
-            className="min-w-[100px] lg:min-w-[160px] m-2 p-2 border-none
-              rounded-xl text-center font-semibold lg:text-2xl hover:text-slate-300
-              hover:bg-gradient-to-bl hover:from-[#484848] hover:to-[#333333]
-              bg-gradient-to-br from-[#595959] to-[#444444]"
-            onClick={update_status}
-          >
-            Update
-          </button>
-        </div>
+        {!tvMode && (
+          <div className="m-auto flex flex-row items-center justify-center py-5">
+            <input
+              autoFocus
+              type="text"
+              placeholder="New Status"
+              className="min-w-[120px] lg:min-w-[400px] bg-[#F9F6EE] py-2 px-3
+                border-none rounded-xl text-[#111111] lg:text-2xl"
+              value={employeeStatus}
+              onChange={handleStatusChange}
+              onKeyDown={handleKeyDown}
+            />
+            <button
+              type="submit"
+              className="min-w-[100px] lg:min-w-[160px] m-2 p-2 border-none rounded-xl
+                text-center font-semibold lg:text-2xl hover:text-slate-300
+                hover:bg-gradient-to-bl hover:from-[#484848] hover:to-[#333333]
+                bg-gradient-to-br from-[#595959] to-[#444444]"
+              onClick={update_status}
+            >
+              Update
+            </button>
+          </div>
+        )}
       </div>
     );
   }

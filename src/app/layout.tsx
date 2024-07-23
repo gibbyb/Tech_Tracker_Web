@@ -2,7 +2,7 @@ import "~/styles/globals.css";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "~/lib/utils";
 import { SessionProvider } from "next-auth/react";
-import Sign_Out from "~/components/auth/Sign_Out";
+import { TVModeProvider } from "~/components/context/TVModeContext";
 
 import { type Metadata } from "next";
 export const metadata: Metadata = {
@@ -43,10 +43,9 @@ export default function RootLayout({
           fontSans.variable)}
       >
         <SessionProvider>
-          <div className="absolute top-4 right-6">
-            <Sign_Out />
-          </div>
-          {children}
+          <TVModeProvider>
+            {children}
+          </TVModeProvider>
         </SessionProvider>
       </body>
     </html>

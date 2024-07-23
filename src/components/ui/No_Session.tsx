@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import Sign_In from "~/components/auth/Sign_In";
+import Sign_In from "~/components/auth/server/Sign_In";
 import Header from "~/components/ui/Header";
 
 export default function No_Session() {

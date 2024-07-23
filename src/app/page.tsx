@@ -3,7 +3,7 @@ import { auth } from "~/auth";
 import No_Session from "~/components/ui/No_Session";
 import Header from "~/components/ui/Header";
 import { getEmployees } from "~/server/functions";
-import TechTable from "~/components/ui/TechTable";
+import Tech_Table from "~/components/ui/Tech_Table";
 
 export default async function HomePage() {
   const session = await auth();
@@ -14,8 +14,8 @@ export default async function HomePage() {
     return (
       <main className="min-h-screen
         bg-gradient-to-b from-[#111111] to-[#212325]">
-        <Header />
-        <TechTable employees={employees}/>
+          <Header />
+          <Tech_Table employees={employees}/>
       </main>
     );
   }
