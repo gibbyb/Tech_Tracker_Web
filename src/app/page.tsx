@@ -12,7 +12,7 @@ export default async function HomePage() {
   } else {
     const employees = await getEmployees();
     return (
-      <main className="min-h-screen
+      <main className="min-h-screen 
         bg-gradient-to-b from-[#111111] to-[#212325]">
           <Header />
           <Tech_Table employees={employees}/>

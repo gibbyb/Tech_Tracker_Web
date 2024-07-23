@@ -146,8 +146,9 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
   if (loading) return <Loading interval_amount={3} />;
   else {
     return (
-      <div className={`techtable-wrapper ${tvMode ? 'content-fullscreen' : ''}`}>
-        <table className={`techtable rounded-2xl m-auto text-center text-[42px]
+      <div className={`${tvMode ? 'content-fullscreen' : ''}`}>
+        {tvMode && <div className="w-full tablefill"></div>}
+        <table className={`techtable m-auto text-center text-[42px]
           ${tvMode ? 'techtable-fullscreen' : 'w-5/6'}`}>
           <thead className="tabletitles border border-[#3e4446] bg-gradient-to-b
             from-[#282828] to-[#383838] text-[48px]">
