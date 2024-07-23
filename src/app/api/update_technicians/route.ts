@@ -1,8 +1,9 @@
+// Update Employee Status by Names
 "use server";
 import { NextResponse } from 'next/server';
 import { updateEmployeeStatusByName } from '~/server/functions';
 
-interface Technician {
+type Technician = {
   name: string;
   status: string;
 }

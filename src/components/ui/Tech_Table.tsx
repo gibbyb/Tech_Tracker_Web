@@ -3,9 +3,10 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSession } from "next-auth/react";
 import Loading from "~/components/ui/Loading";
 import { useTVMode } from "~/components/context/TVModeContext";
+import { Drawer, DrawerTrigger } from "~/components/ui/shadcn/drawer";
+import History_Drawer from "~/components/ui/History_Drawer";
 
-// Define the Employee interface to match data fetched on the server
-interface Employee {
+type Employee = {
   id: number;
   name: string;
   status: string;
@@ -22,7 +23,7 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
   const [employeeData, setEmployeeData] = useState(employees);
 
   const fetch_employees = useCallback(async (): Promise<Employee[]> => {
-    const res = await fetch('/api/v2/get_employees', {
+    const res = await fetch('/api/technicians', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${process.env.API_KEY}`
@@ -35,12 +36,10 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
     if (!session) {
       alert("You must be signed in to update status.");
       return;
-    }
-    
-    if (selectedIds.length === 0 && employeeStatus.trim() !== '') {
+    } else if (selectedIds.length === 0 && employeeStatus.trim() !== '') {
       const cur_user = employees.find(employee => employee.name === session.user?.name);
       if (cur_user) {
-        await fetch('/api/v2/update_status', {
+        await fetch('/api/update_status_by_id', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -50,7 +49,7 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
         });
       }
     } else if (employeeStatus.trim() !== '') {
-      await fetch('/api/v2/update_status', {
+      await fetch('/api/update_status_by_id', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -165,9 +164,10 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
               )}
               <th className="border border-[#3e4446] py-3">Name</th>
               <th className="border border-[#3e4446] py-3">
-                <button>
-                  Status
-                </button>
+                <Drawer>
+                  <DrawerTrigger>Status</DrawerTrigger>
+                    <History_Drawer />
+                </Drawer>
               </th>
               <th className="border border-[#3e4446] py-3">Updated At</th>
             </tr>
