@@ -164,7 +164,11 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
                 </th>
               )}
               <th className="border border-[#3e4446] py-3">Name</th>
-              <th className="border border-[#3e4446] py-3">Status</th>
+              <th className="border border-[#3e4446] py-3">
+                <button>
+                  Status
+                </button>
+              </th>
               <th className="border border-[#3e4446] py-3">Updated At</th>
             </tr>
           </thead>
@@ -189,7 +193,9 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
                   {employee.name}
                 </td>
                 <td className="s-column max-w-[700px] px-1 md:py-3 border border-[#3e4446]">
-                  {employee.status}
+                  <button>
+                    {employee.status}
+                  </button>
                 </td>
                 <td className="ua-column px-1 md:py-3 border border-[#3e4446]">
                   {formatTime(employee.updatedAt)}
