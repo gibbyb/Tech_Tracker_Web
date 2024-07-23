@@ -37,7 +37,10 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
       alert("You must be signed in to update status.");
       return;
     } else if (selectedIds.length === 0 && employeeStatus.trim() !== '') {
-      const cur_user = employees.find(employee => employee.name === session.user?.name);
+      const users_name = session.user?.name ?? "";
+      const name_arr = users_name.split(' ');
+      const lname = name_arr[name_arr.length - 1] ?? "";
+      const cur_user = employees.find(employee => employee.name.includes(lname));
       if (cur_user) {
         await fetch('/api/update_status_by_id', {
           method: 'POST',
