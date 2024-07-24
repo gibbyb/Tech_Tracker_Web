@@ -3,7 +3,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSession } from "next-auth/react";
 import Loading from "~/components/ui/Loading";
 import { useTVMode } from "~/components/context/TVModeContext";
-import { Drawer, DrawerTrigger } from "~/components/ui/shadcn/drawer";
 import History_Drawer from "~/components/ui/History_Drawer";
 
 type Employee = {
@@ -168,10 +167,7 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
               )}
               <th className="border border-[#3e4446] py-3">Name</th>
               <th className="border border-[#3e4446] py-3">
-                <Drawer>
-                  <DrawerTrigger>Status</DrawerTrigger>
-                    <History_Drawer />
-                </Drawer>
+                <History_Drawer />
               </th>
               <th className="border border-[#3e4446] py-3">Updated At</th>
             </tr>
