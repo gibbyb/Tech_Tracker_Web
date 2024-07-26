@@ -22,7 +22,7 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
   const [employeeData, setEmployeeData] = useState(employees);
 
   const fetch_employees = useCallback(async (): Promise<Employee[]> => {
-    const res = await fetch('/api/technicians', {
+    const res = await fetch('/api/get_technicians', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${process.env.API_KEY}`

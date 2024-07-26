@@ -3,12 +3,6 @@ import { NextResponse } from 'next/server';
 import { getEmployees } from '~/server/functions';
 import { auth } from '~/auth';
 
-type Technician = {
-  name: string;
-  status: string;
-  updatedAt: Date;
-};
-
 export const GET = async (request: Request) => {
   try {
     const session = await auth();
@@ -22,12 +16,7 @@ export const GET = async (request: Request) => {
         );
       else {
         const employees = await getEmployees();
-        const formattedEmployees = employees.map((employee: Technician) => ({
-          name: employee.name,
-          status: employee.status,
-          time: employee.updatedAt
-        }));
-        return NextResponse.json(formattedEmployees, { status: 200 });
+        return NextResponse.json(employees, { status: 200 });
       }
     } else {
       const employees = await getEmployees();
