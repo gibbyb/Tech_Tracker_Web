@@ -56,7 +56,7 @@ export const updateEmployeeStatusByName =
 interface HistoryEntry {
   name: string;
   status: string;
-  time: Date;
+  updatedAt: Date;
 }
 interface PaginatedHistory {
   data: HistoryEntry[];
@@ -96,7 +96,7 @@ export const getHistory =
   const formattedResults: HistoryEntry[] = historyRows.map(row => ({
     name: row.name,
     status: row.status,
-    time: new Date(row.updatedAt),
+    updatedAt: new Date(row.updatedAt),
   }));
   return {
     data: formattedResults,
