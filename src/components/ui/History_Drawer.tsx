@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   Drawer,
@@ -19,14 +20,56 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "~/components/ui/shadcn/pagination";
 
+// Type definitions for Paginated History API
+type HistoryEntry = {
+  name: string;
+  status: string;
+  updatedAt: Date;
+}
+type PaginatedHistory = {
+  data: HistoryEntry[];
+  meta: {
+    current_page: number;
+    per_page: number;
+    total_pages: number;
+    total_count: number;
+  }
+}
+
 export default function History_Drawer() {
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const perPage = 5;
+
+  useEffect(() => {
+    const fetchHistory = async (currentPage: number) => {
+      try {
+        const response = await fetch(`/api/get_paginated_history?page=${currentPage}&per_page=${perPage}`);
+        if (!response.ok)
+          throw new Error('Failed to fetch history');
+        const data: PaginatedHistory = await response.json() as PaginatedHistory;
+        setHistory(data.data);
+        setTotalPages(data.meta.total_pages);
+      } catch (error) {
+        console.error('Error fetching history:', error);
+      }
+    };
+    fetchHistory(page)
+    .catch((error) => {
+      console.error('Error fetching history:', error);
+    });
+  }, [page]);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
   return (
     <Drawer>
       <DrawerTrigger>
@@ -49,38 +92,50 @@ export default function History_Drawer() {
             </div>
           </DrawerTitle>
         </DrawerHeader>
-        <Table className="w-5/6 lg:w-1/2 m-auto"
-        >
+        <Table className="w-5/6 lg:w-1/2 m-auto ">
           <TableHeader>
             <TableRow>
-              <TableHead className="">Name</TableHead>
+              <TableHead>Name</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Updated At</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">INV001</TableCell>
-              <TableCell>Paid</TableCell>
-              <TableCell>Credit Card</TableCell>
-            </TableRow>
+            {history.map((entry, index) => (
+              <TableRow key={index}>
+                <TableCell className="font-medium">{entry.name}</TableCell>
+                <TableCell>{entry.status}</TableCell>
+                <TableCell>{new Date(entry.updatedAt).toLocaleString()}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
         <DrawerFooter>
           <Pagination>
             <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious href="#" />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">1</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext href="#" />
-              </PaginationItem>
+              {page > 1 && (
+                <PaginationItem>
+                  <PaginationPrevious
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handlePageChange(page - 1);
+                    }}
+                  />
+                </PaginationItem>
+              )}
+              <h3 className="text-center font-semibold">Page {page}</h3>
+              {page < totalPages && (
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handlePageChange(page + 1);
+                    }}
+                  />
+                </PaginationItem>
+              )}
             </PaginationContent>
           </Pagination>
           <DrawerClose>
@@ -88,5 +143,19 @@ export default function History_Drawer() {
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-      );
-};
+  );
+}
+// If you want to show all page numbers:
+//{Array.from({ length: totalPages }).map((_, idx) => (
+  //<PaginationItem key={idx}>
+    //<PaginationLink
+      //href="#"
+      //onClick={(e) => {
+        //e.preventDefault();
+        //handlePageChange(idx + 1);
+      //}}
+    //>{idx + 1}
+    //</PaginationLink>
+  //</PaginationItem>
+//))}
+

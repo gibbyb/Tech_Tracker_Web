@@ -53,12 +53,12 @@ export const updateEmployeeStatusByName =
 };
 
 // Type definitions for Paginated History API
-interface HistoryEntry {
+type HistoryEntry = {
   name: string;
   status: string;
   updatedAt: Date;
 }
-interface PaginatedHistory {
+type PaginatedHistory = {
   data: HistoryEntry[];
   meta: {
     current_page: number;

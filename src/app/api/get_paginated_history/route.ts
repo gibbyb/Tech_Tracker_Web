@@ -8,6 +8,7 @@ export const GET = async (request: Request) => {
     const url = new URL(request.url);
     const apiKey = url.searchParams.get('apikey');
     const page = Number(url.searchParams.get('page')) || 1;
+    const perPage = Number(url.searchParams.get('per_page')) || 50;
     if (apiKey !== process.env.API_KEY) {
       const session = await auth();
       if (!session)
@@ -16,7 +17,6 @@ export const GET = async (request: Request) => {
           { status: 401 }
         );
     }
-    const perPage = 50;
     const historyData = await getHistory(page, perPage);
     return NextResponse.json(historyData, { status: 200 });
   } catch (error) {
