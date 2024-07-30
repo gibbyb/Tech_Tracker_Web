@@ -97,7 +97,7 @@ const History_Drawer: React.FC<History_Drawer_Props> = ({ user_id }) => {
             {history.map((entry, index) => (
               <TableRow key={index}>
                 <TableCell className="font-medium lg:max-w-[100px]">{entry.name}</TableCell>
-                <TableCell className="font-medium lg:max-w-[100px]">{entry.status}</TableCell>
+                <TableCell className="font-medium lg:max-w-[100px] wrapword">{entry.status}</TableCell>
                 <TableCell className="font-medium lg:max-w-[100px] justify-end items-end text-right">{new Date(entry.updatedAt).toLocaleString()}</TableCell>
               </TableRow>
             ))}
