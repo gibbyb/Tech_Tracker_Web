@@ -204,7 +204,8 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
                 <td className="n-column px-1 md:py-3 border border-[#3e4446]">
                   {employee.name}
                 </td>
-                <td className="s-column max-w-[700px] px-1 md:py-3 border border-[#3e4446]">
+                <td className="s-column max-w-[700px] px-1 md:py-3 border
+                  border-[#3e4446] wrapword">
                     <Drawer>
                       <DrawerTrigger>
                       <button onClick={() => handleStatusClick(employee.id)}>
