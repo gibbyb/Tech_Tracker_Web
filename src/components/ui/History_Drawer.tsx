@@ -19,6 +19,7 @@ import {
 import {
   Pagination,
   PaginationContent,
+  PaginationLink,
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
@@ -117,16 +118,30 @@ const History_Drawer: React.FC<History_Drawer_Props> = ({ user_id }) => {
                 />
               </PaginationItem>
             )}
-            <h3 className="text-center flex flex-row">
-              Page 
-              <h3 className="font-bold mx-1">
-                {page}
+            {totalPages > 10 && (
+              <h3 className="text-center flex flex-row">
+                Page 
+                <h3 className="font-bold mx-1">
+                  {page}
+                </h3>
+                of
+                <h3 className="font-semibold ml-1">
+                  {totalPages}
+                </h3>
               </h3>
-              of
-              <h3 className="font-semibold ml-1">
-                {totalPages}
-              </h3>
-            </h3>
+            )}
+            {totalPages <= 10 && Array.from({ length: totalPages }).map((_, idx) => (
+              <PaginationItem key={idx}>
+                <PaginationLink
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handlePageChange(idx + 1);
+                  }}
+                >{idx + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
             {page < totalPages && (
               <PaginationItem>
                 <PaginationNext
@@ -146,18 +161,4 @@ const History_Drawer: React.FC<History_Drawer_Props> = ({ user_id }) => {
     </DrawerContent>
   );
 };
-
 export default History_Drawer;
-// If you want to show all page numbers:
-//{Array.from({ length: totalPages }).map((_, idx) => (
-  //<PaginationItem key={idx}>
-    //<PaginationLink
-      //href="#"
-      //onClick={(e) => {
-        //e.preventDefault();
-        //handlePageChange(idx + 1);
-      //}}
-    //>{idx + 1}
-    //</PaginationLink>
-  //</PaginationItem>
-//))}
