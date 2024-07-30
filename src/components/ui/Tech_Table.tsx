@@ -3,6 +3,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSession } from "next-auth/react";
 import Loading from "~/components/ui/Loading";
 import { useTVMode } from "~/components/context/TVModeContext";
+import { Drawer, DrawerTrigger } from "~/components/ui/shadcn/drawer";
+
 import History_Drawer from "~/components/ui/History_Drawer";
 
 type Employee = {
@@ -20,6 +22,7 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
   const [selectAll, setSelectAll] = useState(false);
   const [employeeStatus, setStatus] = useState('');
   const [employeeData, setEmployeeData] = useState(employees);
+  const [selectedUserId, setSelectedUserId] = useState(-1);
 
   const fetch_employees = useCallback(async (): Promise<Employee[]> => {
     const res = await fetch('/api/get_technicians', {
@@ -95,6 +98,10 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
     }
   };
 
+  const handleStatusClick = (id: number) => {
+    setSelectedUserId(id);
+  };
+
   const formatTime = (timestamp: Date) => {
     const date = new Date(timestamp);
     const time = date.toLocaleTimeString('en-US', {
@@ -167,7 +174,12 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
               )}
               <th className="border border-[#3e4446] py-3">Name</th>
               <th className="border border-[#3e4446] py-3">
-                <History_Drawer />
+                <Drawer>
+                  <DrawerTrigger>
+                    Status
+                  </DrawerTrigger>
+                  <History_Drawer user_id={-1}/>
+                </Drawer>
               </th>
               <th className="border border-[#3e4446] py-3">Updated At</th>
             </tr>
@@ -193,9 +205,16 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
                   {employee.name}
                 </td>
                 <td className="s-column max-w-[700px] px-1 md:py-3 border border-[#3e4446]">
-                  <button>
-                    {employee.status}
-                  </button>
+                    <Drawer>
+                      <DrawerTrigger>
+                      <button onClick={() => handleStatusClick(employee.id)}>
+                        {employee.status}
+                      </button>
+                      </DrawerTrigger>
+                      {selectedUserId !== -1 && (
+                        <History_Drawer key={selectedUserId} user_id={selectedUserId} />
+                      )}
+                    </Drawer>
                 </td>
                 <td className="ua-column px-1 md:py-3 border border-[#3e4446]">
                   {formatTime(employee.updatedAt)}

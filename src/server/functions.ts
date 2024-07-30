@@ -68,32 +68,46 @@ type PaginatedHistory = {
   }
 }
 
-export const getHistory =
-  async (page: number, perPage: number): Promise<PaginatedHistory> => {
+export const get_history = async (user_id: number, page: number, perPage: number): Promise<PaginatedHistory> => {
   const offset = (page - 1) * perPage;
-  const historyQuery = sql`
+  let historyQuery = sql`
     SELECT u.name, h.status, h.updatedAt
     FROM history h
     JOIN users u ON h.user_id = u.id
+    WHERE h.user_id = ${user_id}
     ORDER BY h.id DESC
     LIMIT ${perPage} OFFSET ${offset}
   `;
-  const countQuery = sql`
+  let countQuery = sql`
     SELECT COUNT(*) AS total_count
     FROM history
+    WHERE user_id = ${user_id}
   `;
-  const [historyResults, countResults] = await Promise.all([
+  if (user_id === -1) {
+    historyQuery = sql`
+      SELECT u.name, h.status, h.updatedAt
+      FROM history h
+      JOIN users u ON h.user_id = u.id
+      ORDER BY h.id DESC
+      LIMIT ${perPage} OFFSET ${offset}
+    `;
+    countQuery = sql`
+      SELECT COUNT(*) AS total_count
+      FROM history
+    `;
+  } 
+  const [historyresults, countresults] = await Promise.all([
     db.execute(historyQuery), 
     db.execute(countQuery),
   ]);
   // Safely cast results
-  const historyRows = historyResults[0] as unknown as
+  const historyrows = historyresults[0] as unknown as
     { name: string, status: string, updatedAt: Date }[];
-  const countRow = countResults[0] as unknown as { total_count: number }[];
-  const totalCount = countRow[0]?.total_count ?? 0;
+  const countrow = countresults[0] as unknown as { total_count: number }[];
+  const totalCount = countrow[0]?.total_count ?? 0;
   const totalPages = Math.ceil(totalCount / perPage);
   // Format and map results
-  const formattedResults: HistoryEntry[] = historyRows.map(row => ({
+  const formattedResults: HistoryEntry[] = historyrows.map(row => ({
     name: row.name,
     status: row.status,
     updatedAt: new Date(row.updatedAt),
@@ -108,4 +122,45 @@ export const getHistory =
     }
   };
 };
+
+//export const getHistory =
+  //async (page: number, perPage: number): Promise<PaginatedHistory> => {
+  //const offset = (page - 1) * perPage;
+  //const historyQuery = sql`
+    //SELECT u.name, h.status, h.updatedAt
+    //FROM history h
+    //JOIN users u ON h.user_id = u.id
+    //ORDER BY h.id DESC
+    //LIMIT ${perPage} OFFSET ${offset}
+  //`;
+  //const countQuery = sql`
+    //SELECT COUNT(*) AS total_count
+    //FROM history
+  //`;
+  //const [historyResults, countResults] = await Promise.all([
+    //db.execute(historyQuery), 
+    //db.execute(countQuery),
+  //]);
+  //// Safely cast results
+  //const historyRows = historyResults[0] as unknown as
+    //{ name: string, status: string, updatedAt: Date }[];
+  //const countRow = countResults[0] as unknown as { total_count: number }[];
+  //const totalCount = countRow[0]?.total_count ?? 0;
+  //const totalPages = Math.ceil(totalCount / perPage);
+  //// Format and map results
+  //const formattedResults: HistoryEntry[] = historyRows.map(row => ({
+    //name: row.name,
+    //status: row.status,
+    //updatedAt: new Date(row.updatedAt),
+  //}));
+  //return {
+    //data: formattedResults,
+    //meta: {
+      //current_page: page,
+      //per_page: perPage,
+      //total_pages: totalPages,
+      //total_count: totalCount,
+    //}
+  //};
+//};
 
