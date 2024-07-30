@@ -50,7 +50,10 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${process.env.API_KEY}`
           },
-          body: JSON.stringify({ employeeIds: [cur_user.id], newStatus: employeeStatus }),
+          body: JSON.stringify(
+            { employeeIds: [cur_user.id],
+              newStatus: employeeStatus }
+          ),
         });
       }
     } else if (employeeStatus.trim() !== '') {
@@ -60,7 +63,10 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${process.env.API_KEY}`
         },
-        body: JSON.stringify({ employeeIds: selectedIds, newStatus: employeeStatus }),
+        body: JSON.stringify(
+          { employeeIds: selectedIds,
+            newStatus: employeeStatus }
+        ),
       });
     }
     
@@ -163,10 +169,10 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
             from-[#282828] to-[#383838] text-[48px]">
             <tr>
               {!tvMode && (
-                <th className="py-3 px-6 border border-[#3e4446]">
+                <th className="py-3 px-3 md:px-6 border border-[#3e4446]">
                   <input
                     type="checkbox"
-                    className="m-auto cursor-pointer scale-150"
+                    className="m-auto cursor-pointer md:scale-150"
                     checked={selectAll}
                     onChange={handleSelectAllChange}
                   />
@@ -195,7 +201,7 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
                 <td className="p-1 border border-[#3e4446]">
                   <input
                     type="checkbox"
-                    className="m-auto cursor-pointer scale-150"
+                    className="m-auto cursor-pointer md:scale-150"
                     checked={selectedIds.includes(employee.id)}
                     onChange={() => handleCheckboxChange(employee.id)}
                   />
