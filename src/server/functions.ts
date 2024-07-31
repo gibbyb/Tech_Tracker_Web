@@ -107,11 +107,17 @@ export const get_history = async (user_id: number, page: number, perPage: number
   const totalCount = countrow[0]?.total_count ?? 0;
   const totalPages = Math.ceil(totalCount / perPage);
   // Format and map results
-  const formattedResults: HistoryEntry[] = historyrows.map(row => ({
+  let formattedResults: HistoryEntry[] = historyrows.map(row => ({
     name: row.name,
     status: row.status,
     updatedAt: new Date(row.updatedAt),
   }));
+  if (process.env.NODE_ENV === 'development') {
+    formattedResults = formattedResults.map(entry => ({
+      ...entry,
+      updatedAt: new Date(entry.updatedAt.setHours(entry.updatedAt.getUTCHours()+14)),
+    }));
+  }
   return {
     data: formattedResults,
     meta: {
