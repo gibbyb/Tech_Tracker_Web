@@ -213,18 +213,18 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
                 </td>
                 <td className="s-column max-w-[700px] px-1 md:py-3 border
                   border-[#3e4446] wrapword max-h-0">
+                  <ScrollArea className="w-full m-auto h-[60px]">
                     <Drawer>
                       <DrawerTrigger>
                       <button onClick={() => handleStatusClick(employee.id)}>
-                        <ScrollArea className="w-full m-auto h-[60px]">
-                          {employee.status}
-                        </ScrollArea>
+                        {employee.status}
                       </button>
                       </DrawerTrigger>
                       {selectedUserId !== -1 && (
                         <History_Drawer key={selectedUserId} user_id={selectedUserId} />
                       )}
                     </Drawer>
+                  </ScrollArea>
                 </td>
                 <td className="ua-column px-1 md:py-3 border border-[#3e4446]">
                   {formatTime(employee.updatedAt)}
