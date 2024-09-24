@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import Loading from "~/components/ui/Loading";
 import { useTVMode } from "~/components/context/TVModeContext";
 import { Drawer, DrawerTrigger } from "~/components/ui/shadcn/drawer";
+import { ScrollArea } from "~/components/ui/shadcn/scroll-area";
 
 import History_Drawer from "~/components/ui/History_Drawer";
 
@@ -211,11 +212,13 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
                   {employee.name}
                 </td>
                 <td className="s-column max-w-[700px] px-1 md:py-3 border
-                  border-[#3e4446] wrapword">
+                  border-[#3e4446] wrapword max-h-0">
                     <Drawer>
                       <DrawerTrigger>
                       <button onClick={() => handleStatusClick(employee.id)}>
-                        {employee.status}
+                        <ScrollArea className="w-full m-auto h-[60px]">
+                          {employee.status}
+                        </ScrollArea>
                       </button>
                       </DrawerTrigger>
                       {selectedUserId !== -1 && (
