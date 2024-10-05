@@ -12,7 +12,8 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "go": "git pull && next build && next start"
+    "godev": "git pull && next dev",
+    "go": "next build && next start"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
