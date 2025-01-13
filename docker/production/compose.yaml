@@ -1,0 +1,16 @@
+services:
+  techtracker:
+    build:
+      context: ../../
+      dockerfile: docker/production/Dockerfile
+    image: with-docker-multi-env-development
+    container_name: techtracker
+    networks:
+      - node_apps
+    ports:
+      - "3004:3000"
+    tty: true
+    restart: unless-stopped
+networks:
+  node_apps:
+    external: true
