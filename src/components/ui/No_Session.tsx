@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import Sign_In from "~/components/auth/server/Sign_In";
+import Sign_In_Microsoft from "~/components/auth/server/microsoft/Sign_In";
+import Sign_In_Authentik from "~/components/auth/server/authentik/Sign_In";
 import Header from "~/components/ui/Header";
 
 export default function No_Session() {
@@ -12,7 +13,10 @@ export default function No_Session() {
       </div>
       <div className="mx-auto flex flex-col">
         <div className="py-4">
-          < Sign_In />
+          < Sign_In_Microsoft />
+        </div>
+        <div className="py-4">
+          < Sign_In_Authentik />
         </div>
         <Link href="https://git.gibbyb.com/gib/Tech_Tracker_Web"
           className="text-center text-[16px] md:text-lg px-4 py-2 md:py-2.5 font-semibold
