@@ -12,7 +12,7 @@ export const env = createEnv({
       .enum(['development', 'test', 'production'])
       .default('development'),
     API_KEY: z.string(),
-    AUTH_TRUST_HOST: z.boolean().default(true),
+    AUTH_TRUST_HOST: z.coerce.boolean().default(true),
     AUTH_SECRET: z.string(),
     AUTH_MICROSOFT_ENTRA_ID_ID: z.string(),
     AUTH_MICROSOFT_ENTRA_ID_SECRET: z.string(),

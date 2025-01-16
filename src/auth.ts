@@ -15,11 +15,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       issuer: process.env.AUTH_AUTHENTIK_ISSUER,
     }),
   ],
-  debug: true,
-  callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      console.log('signIn', { user, account, profile, email, credentials });
-      return true;
-    },
-  },
 });
