@@ -13,28 +13,35 @@ export default function No_Session() {
       <div className='md:w-2/3 pt-4 pb-2 md:pt-10 md:pb-4 m-auto'>
         <Header />
       </div>
-      <div className='mx-auto flex flex-col'>
-        <div className='py-4'>
-          <Sign_In_Microsoft />
+      <div className='mx-auto flex flex-col items-center justify-center'>
+        <div className='flex sm:flex-row flex-col p-4'>
+          <div className='p-4'>
+            <Sign_In_Microsoft />
+          </div>
+          <div className='p-4'>
+            <Sign_In_Authentik />
+          </div>
         </div>
-        <div className='py-4'>
-          <Sign_In_Authentik />
-        </div>
+      </div>
+      <div className='sm:absolute sm:bottom-6 sm:left-4 flex flex-row'>
         <Link
           href='https://git.gibbyb.com/gib/Tech_Tracker_Web'
-          className='text-center text-[16px] md:text-lg px-4 py-2 md:py-2.5 font-semibold
-          bg-gradient-to-tl from-[#35363F] to=[#24191A] rounded-xl hover:text-sky-200 
-          hover:bg-gradient-to-tr hover:from-[#35363F] hover:to-[#23242F]
-          mx-auto flex flex-row'
+          className='text-center text-[16px] md:text-lg p-2 font-semibold
+            bg-gradient-to-tl from-[#35363F] to=[#24191A] rounded-xl hover:text-sky-200 
+            hover:bg-gradient-to-tr hover:from-[#35363F] hover:to-[#23242F]
+            mx-auto flex flex-col items-center justify-center'
         >
-          <Image
+          <h3 className='my-auto'>View Source Code on</h3>
+          <div className='flex flex-row px-2'>
+            <Image
             src='/images/gitea_logo.svg'
             alt='Gitea'
-            width={35}
-            height={35}
+            width={40}
+            height={40}
             className='mr-2'
-          />
-          <h3 className='my-auto'>Source Code</h3>
+            />
+            <h3 className='my-auto text-2xl'>Gitea</h3>
+          </div>
         </Link>
       </div>
     </main>

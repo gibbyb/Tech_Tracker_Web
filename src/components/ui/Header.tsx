@@ -25,7 +25,7 @@ export default function Header() {
         </div>
         <div
           className='flex flex-row items-center text-center
-          sm:justify-center ml-4 sm:ml-0 p-4'
+            justify-center sm:ml-0 p-4 mt-10 sm:mt-0'
         >
           <Image
             src='/images/tech_tracker_logo.png'
