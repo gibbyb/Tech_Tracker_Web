@@ -1,4 +1,4 @@
-"use server";
+'use server';
 import { NextResponse } from 'next/server';
 import { get_history } from '~/server/functions';
 import { auth } from '~/auth';
@@ -13,10 +13,7 @@ export const GET = async (request: Request) => {
     if (apiKey !== process.env.API_KEY) {
       const session = await auth();
       if (!session)
-        return NextResponse.json(
-          { message: 'Unauthorized' },
-          { status: 401 }
-        );
+        return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
     const historyData = await get_history(userId, page, perPage);
     return NextResponse.json(historyData, { status: 200 });
@@ -24,7 +21,7 @@ export const GET = async (request: Request) => {
     console.error('Error fetching history data:', error);
     return NextResponse.json(
       { message: 'Internal server error' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 };

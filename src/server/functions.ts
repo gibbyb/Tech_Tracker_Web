@@ -1,6 +1,6 @@
-import "server-only";
-import { db } from "~/server/db";
-import { sql } from "drizzle-orm";
+import 'server-only';
+import { db } from '~/server/db';
+import { sql } from 'drizzle-orm';
 
 export const getEmployees = async () => {
   return await db.query.users.findMany({
@@ -10,15 +10,17 @@ export const getEmployees = async () => {
 
 // Update Employee Status uses Raw SQL because Drizzle ORM doesn't support
 // update with MySQL
-export const updateEmployeeStatus =
-  async (employeeIds: string[], newStatus: string) => {
+export const updateEmployeeStatus = async (
+  employeeIds: string[],
+  newStatus: string,
+) => {
   try {
     // Convert array of ids to a format suitable for SQL query (comma-separated string)
-    const idList = employeeIds.map(id => parseInt(id, 10));
+    const idList = employeeIds.map((id) => parseInt(id, 10));
     let updatedAt = new Date();
     // Not sure why but localhost is off by 5 hours
     if (process.env.NODE_ENV === 'development')
-      updatedAt = new Date(updatedAt.setHours(updatedAt.getUTCHours())+ 5);
+      updatedAt = new Date(updatedAt.setHours(updatedAt.getUTCHours()) + 5);
     const query = sql`
       UPDATE users
       SET status = ${newStatus}, updatedAt = ${updatedAt}
@@ -27,14 +29,15 @@ export const updateEmployeeStatus =
     await db.execute(query);
     return { success: true };
   } catch (error) {
-    console.error("Error updating employee status:", error);
-    throw new Error("Failed to update status");
+    console.error('Error updating employee status:', error);
+    throw new Error('Failed to update status');
   }
 };
 
 // Function to Update Employee Status by Name using Raw SQL
-export const updateEmployeeStatusByName =
-  async (technicians:{ name: string, status: string }[]) => {
+export const updateEmployeeStatusByName = async (
+  technicians: { name: string; status: string }[],
+) => {
   try {
     for (const technician of technicians) {
       const { name, status } = technician;
@@ -47,8 +50,8 @@ export const updateEmployeeStatusByName =
     }
     return { success: true };
   } catch (error) {
-    console.error("Error updating employee status by name:", error);
-    throw new Error("Failed to update status by name");
+    console.error('Error updating employee status by name:', error);
+    throw new Error('Failed to update status by name');
   }
 };
 
@@ -57,7 +60,7 @@ type HistoryEntry = {
   name: string;
   status: string;
   updatedAt: Date;
-}
+};
 type PaginatedHistory = {
   data: HistoryEntry[];
   meta: {
@@ -65,10 +68,14 @@ type PaginatedHistory = {
     per_page: number;
     total_pages: number;
     total_count: number;
-  }
-}
+  };
+};
 
-export const get_history = async (user_id: number, page: number, perPage: number): Promise<PaginatedHistory> => {
+export const get_history = async (
+  user_id: number,
+  page: number,
+  perPage: number,
+): Promise<PaginatedHistory> => {
   const offset = (page - 1) * perPage;
   let historyQuery = sql`
     SELECT u.name, h.status, h.updatedAt
@@ -95,27 +102,32 @@ export const get_history = async (user_id: number, page: number, perPage: number
       SELECT COUNT(*) AS total_count
       FROM history
     `;
-  } 
+  }
   const [historyresults, countresults] = await Promise.all([
-    db.execute(historyQuery), 
+    db.execute(historyQuery),
     db.execute(countQuery),
   ]);
   // Safely cast results
-  const historyrows = historyresults[0] as unknown as
-    { name: string, status: string, updatedAt: Date }[];
+  const historyrows = historyresults[0] as unknown as {
+    name: string;
+    status: string;
+    updatedAt: Date;
+  }[];
   const countrow = countresults[0] as unknown as { total_count: number }[];
   const totalCount = countrow[0]?.total_count ?? 0;
   const totalPages = Math.ceil(totalCount / perPage);
   // Format and map results
-  let formattedResults: HistoryEntry[] = historyrows.map(row => ({
+  let formattedResults: HistoryEntry[] = historyrows.map((row) => ({
     name: row.name,
     status: row.status,
     updatedAt: new Date(row.updatedAt),
   }));
   if (process.env.NODE_ENV === 'development') {
-    formattedResults = formattedResults.map(entry => ({
+    formattedResults = formattedResults.map((entry) => ({
       ...entry,
-      updatedAt: new Date(entry.updatedAt.setHours(entry.updatedAt.getUTCHours()+14)),
+      updatedAt: new Date(
+        entry.updatedAt.setHours(entry.updatedAt.getUTCHours() + 14),
+      ),
     }));
   }
   return {
@@ -125,6 +137,6 @@ export const get_history = async (user_id: number, page: number, perPage: number
       per_page: perPage,
       total_pages: totalPages,
       total_count: totalCount,
-    }
+    },
   };
 };

@@ -1,19 +1,19 @@
-"use client";
+'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { useSession } from "next-auth/react";
-import Loading from "~/components/ui/Loading";
-import { useTVMode } from "~/components/context/TVModeContext";
-import { Drawer, DrawerTrigger } from "~/components/ui/shadcn/drawer";
-import { ScrollArea } from "~/components/ui/shadcn/scroll-area";
+import { useSession } from 'next-auth/react';
+import Loading from '~/components/ui/Loading';
+import { useTVMode } from '~/components/context/TVModeContext';
+import { Drawer, DrawerTrigger } from '~/components/ui/shadcn/drawer';
+import { ScrollArea } from '~/components/ui/shadcn/scroll-area';
 
-import History_Drawer from "~/components/ui/History_Drawer";
+import History_Drawer from '~/components/ui/History_Drawer';
 
 type Employee = {
   id: number;
   name: string;
   status: string;
   updatedAt: Date;
-}
+};
 
 export default function Tech_Table({ employees }: { employees: Employee[] }) {
   const { data: session, status } = useSession();
@@ -29,32 +29,34 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
     const res = await fetch('/api/get_technicians', {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${process.env.API_KEY}`
-      }
+        Authorization: `Bearer ${process.env.API_KEY}`,
+      },
     });
     return res.json() as Promise<Employee[]>;
   }, []);
 
   const update_status = async () => {
     if (!session) {
-      alert("You must be signed in to update status.");
+      alert('You must be signed in to update status.');
       return;
     } else if (selectedIds.length === 0 && employeeStatus.trim() !== '') {
-      const users_name = session.user?.name ?? "";
+      const users_name = session.user?.name ?? '';
       const name_arr = users_name.split(' ');
-      const lname = name_arr[name_arr.length - 1] ?? "";
-      const cur_user = employees.find(employee => employee.name.includes(lname));
+      const lname = name_arr[name_arr.length - 1] ?? '';
+      const cur_user = employees.find((employee) =>
+        employee.name.includes(lname),
+      );
       if (cur_user) {
         await fetch('/api/update_status_by_id', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.API_KEY}`
+            Authorization: `Bearer ${process.env.API_KEY}`,
           },
-          body: JSON.stringify(
-            { employeeIds: [cur_user.id],
-              newStatus: employeeStatus }
-          ),
+          body: JSON.stringify({
+            employeeIds: [cur_user.id],
+            newStatus: employeeStatus,
+          }),
         });
       }
     } else if (employeeStatus.trim() !== '') {
@@ -62,15 +64,15 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.API_KEY}`
+          Authorization: `Bearer ${process.env.API_KEY}`,
         },
-        body: JSON.stringify(
-          { employeeIds: selectedIds,
-            newStatus: employeeStatus }
-        ),
+        body: JSON.stringify({
+          employeeIds: selectedIds,
+          newStatus: employeeStatus,
+        }),
       });
     }
-    
+
     const updatedEmployees = await fetch_employees();
     setEmployeeData(updatedEmployees);
     setSelectedIds([]);
@@ -81,7 +83,7 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
     setSelectedIds((prevSelected) =>
       prevSelected.includes(id)
         ? prevSelected.filter((prevId) => prevId !== id)
-        : [...prevSelected, id]
+        : [...prevSelected, id],
     );
   };
 
@@ -121,7 +123,7 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
   };
 
   useEffect(() => {
-    if (status !== "loading") {
+    if (status !== 'loading') {
       setLoading(false);
     }
   }, [status]);
@@ -135,7 +137,7 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
       const updatedEmployees = await fetch_employees();
       setEmployeeData(updatedEmployees);
     };
-    
+
     fetchAndUpdateEmployees().catch((error) => {
       console.error('Error fetching employees:', error);
     });
@@ -147,7 +149,7 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
         console.error('Error fetching employees:', error);
       });
     }, 10000);
-    
+
     return () => clearInterval(intervalId);
   }, [fetch_employees]);
 
@@ -163,70 +165,77 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
   else {
     return (
       <div className={`${tvMode ? 'content-fullscreen' : ''}`}>
-        {tvMode && <div className="w-full tablefill"></div>}
-        <table className={`techtable m-auto text-center text-[42px]
-          ${tvMode ? 'techtable-fullscreen' : 'w-5/6'}`}>
-          <thead className="tabletitles border border-[#3e4446] bg-gradient-to-b
-            from-[#282828] to-[#383838] text-[48px]">
+        {tvMode && <div className='w-full tablefill'></div>}
+        <table
+          className={`techtable m-auto text-center text-[42px]
+          ${tvMode ? 'techtable-fullscreen' : 'w-5/6'}`}
+        >
+          <thead
+            className='tabletitles border border-[#3e4446] bg-gradient-to-b
+            from-[#282828] to-[#383838] text-[48px]'
+          >
             <tr>
               {!tvMode && (
-                <th className="py-3 px-3 md:px-6 border border-[#3e4446]">
+                <th className='py-3 px-3 md:px-6 border border-[#3e4446]'>
                   <input
-                    type="checkbox"
-                    className="m-auto cursor-pointer md:scale-150"
+                    type='checkbox'
+                    className='m-auto cursor-pointer md:scale-150'
                     checked={selectAll}
                     onChange={handleSelectAllChange}
                   />
                 </th>
               )}
-              <th className="border border-[#3e4446] py-3">Name</th>
-              <th className="border border-[#3e4446] py-3">
+              <th className='border border-[#3e4446] py-3'>Name</th>
+              <th className='border border-[#3e4446] py-3'>
                 <Drawer>
-                  <DrawerTrigger>
-                    Status
-                  </DrawerTrigger>
-                  <History_Drawer user_id={-1}/>
+                  <DrawerTrigger>Status</DrawerTrigger>
+                  <History_Drawer user_id={-1} />
                 </Drawer>
               </th>
-              <th className="border border-[#3e4446] py-3">Updated At</th>
+              <th className='border border-[#3e4446] py-3'>Updated At</th>
             </tr>
           </thead>
           <tbody>
             {employeeData.map((employee) => (
               <tr
-                className="even:bg-gradient-to-br from-[#272727] to-[#313131]
-                  odd:bg-gradient-to-bl odd:from-[#252525] odd:to-[#212125]"
+                className='even:bg-gradient-to-br from-[#272727] to-[#313131]
+                  odd:bg-gradient-to-bl odd:from-[#252525] odd:to-[#212125]'
                 key={employee.id}
               >
-              {!tvMode && (
-                <td className="p-1 border border-[#3e4446]">
-                  <input
-                    type="checkbox"
-                    className="m-auto cursor-pointer md:scale-150"
-                    checked={selectedIds.includes(employee.id)}
-                    onChange={() => handleCheckboxChange(employee.id)}
-                  />
-                </td>
-              )}
-                <td className="n-column px-1 md:py-3 border border-[#3e4446]">
+                {!tvMode && (
+                  <td className='p-1 border border-[#3e4446]'>
+                    <input
+                      type='checkbox'
+                      className='m-auto cursor-pointer md:scale-150'
+                      checked={selectedIds.includes(employee.id)}
+                      onChange={() => handleCheckboxChange(employee.id)}
+                    />
+                  </td>
+                )}
+                <td className='n-column px-1 md:py-3 border border-[#3e4446]'>
                   {employee.name}
                 </td>
-                <td className="s-column max-w-[700px] px-1 md:py-3 border
-                  border-[#3e4446] wrapword max-h-0">
-                  <ScrollArea className="w-full m-auto h-[60px]">
+                <td
+                  className='s-column max-w-[700px] px-1 md:py-3 border
+                  border-[#3e4446] wrapword max-h-0'
+                >
+                  <ScrollArea className='w-full m-auto h-[60px]'>
                     <Drawer>
                       <DrawerTrigger>
-                      <button onClick={() => handleStatusClick(employee.id)}>
-                        {employee.status}
-                      </button>
+                        <button onClick={() => handleStatusClick(employee.id)}>
+                          {employee.status}
+                        </button>
                       </DrawerTrigger>
                       {selectedUserId !== -1 && (
-                        <History_Drawer key={selectedUserId} user_id={selectedUserId} />
+                        <History_Drawer
+                          key={selectedUserId}
+                          user_id={selectedUserId}
+                        />
                       )}
                     </Drawer>
                   </ScrollArea>
                 </td>
-                <td className="ua-column px-1 md:py-3 border border-[#3e4446]">
+                <td className='ua-column px-1 md:py-3 border border-[#3e4446]'>
                   {formatTime(employee.updatedAt)}
                 </td>
               </tr>
@@ -234,23 +243,23 @@ export default function Tech_Table({ employees }: { employees: Employee[] }) {
           </tbody>
         </table>
         {!tvMode && (
-          <div className="m-auto flex flex-row items-center justify-center py-5">
+          <div className='m-auto flex flex-row items-center justify-center py-5'>
             <input
               autoFocus
-              type="text"
-              placeholder="New Status"
-              className="min-w-[120px] lg:min-w-[400px] bg-[#F9F6EE] py-2 px-3
-                border-none rounded-xl text-[#111111] lg:text-2xl"
+              type='text'
+              placeholder='New Status'
+              className='min-w-[120px] lg:min-w-[400px] bg-[#F9F6EE] py-2 px-3
+                border-none rounded-xl text-[#111111] lg:text-2xl'
               value={employeeStatus}
               onChange={handleStatusChange}
               onKeyDown={handleKeyDown}
             />
             <button
-              type="submit"
-              className="min-w-[100px] lg:min-w-[160px] m-2 p-2 border-none rounded-xl
+              type='submit'
+              className='min-w-[100px] lg:min-w-[160px] m-2 p-2 border-none rounded-xl
                 text-center font-semibold lg:text-2xl hover:text-slate-300
                 hover:bg-gradient-to-bl hover:from-[#484848] hover:to-[#333333]
-                bg-gradient-to-br from-[#595959] to-[#444444]"
+                bg-gradient-to-br from-[#595959] to-[#444444]'
               onClick={update_status}
             >
               Update

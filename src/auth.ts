@@ -1,7 +1,7 @@
-import NextAuth from "next-auth"
-import Entra from "next-auth/providers/microsoft-entra-id"
-import Authentik from "next-auth/providers/authentik"
- 
+import NextAuth from 'next-auth';
+import Entra from 'next-auth/providers/microsoft-entra-id';
+import Authentik from 'next-auth/providers/authentik';
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Entra({
@@ -15,4 +15,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       issuer: process.env.AUTH_AUTHENTIK_ISSUER,
     }),
   ],
-})
+});

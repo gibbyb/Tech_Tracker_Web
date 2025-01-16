@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { createContext, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
 
@@ -11,7 +11,7 @@ const TVModeContext = createContext<TVModeContextProps | undefined>(undefined);
 
 export const TVModeProvider = ({ children }: { children: ReactNode }) => {
   const [tvMode, setTVMode] = useState(false);
-  
+
   const toggleTVMode = () => {
     setTVMode((prev) => !prev);
   };
