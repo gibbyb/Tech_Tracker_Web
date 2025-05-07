@@ -6,12 +6,12 @@ services:
     image: with-docker-multi-env-development
     container_name: techtracker
     networks:
-      - node_apps
-    ports:
-      - "3004:3000"
+      - nginx-bridge
+    #ports:
+      #- "3000:3000"
     tty: true
     restart: unless-stopped
 networks:
-  node_apps:
+  nginx-bridge:
     external: true
 
